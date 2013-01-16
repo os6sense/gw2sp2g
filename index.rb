@@ -4,6 +4,14 @@ require 'erb'
 
 require_relative 'page_fragments'
 
+def random_background
+    urls = ["https://d3b4yo2b5lbfy.cloudfront.net/wp-content/uploads/wallpapers/GW2Warrior02-1280x960.jpg",
+        "https://d3b4yo2b5lbfy.cloudfront.net/wp-content/uploads/wallpapers/HumanBonusWP02-1280x960.jpg"
+    ]
+    "background-image:url('#{urls.sample}');"
+
+end
+
 def generate_page
 	page_template = %{
 		<html>
@@ -11,8 +19,13 @@ def generate_page
 			<title></title>
 			<link rel="stylesheet" type="text/css" href="css/gw2sp2g.css">
 			<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js"></script>
-			<script type="text/javascript" src="javascript/jExpand.js"></script> 
-		
+			<script type="text/javascript" src="javascript/jExpand.js"></script>
+                        <style>
+                            body {
+                                <%= random_background %>
+                                background-size: 100% auto;
+                            }
+                        </style>
 		</head>
 		<body>
 		<div id="wrapper">
@@ -41,4 +54,6 @@ def generate_page
 	ERB.new(page_template).result(binding)
 end
 
-print generate_page
+if $DEBUG
+    print generate_page
+end
