@@ -10,6 +10,9 @@ def random_background
     ]
     "background-image:url('#{urls.sample}');"
 
+    
+
+
 end
 
 def generate_page
