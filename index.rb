@@ -8,7 +8,7 @@ def random_background
     urls = ["https://d3b4yo2b5lbfy.cloudfront.net/wp-content/uploads/wallpapers/GW2Warrior02-1280x960.jpg",
         "https://d3b4yo2b5lbfy.cloudfront.net/wp-content/uploads/wallpapers/HumanBonusWP02-1280x960.jpg"
     ]
-    "background-image:url('#{urls.sample}');"
+    "#{urls.sample}"
 
     
 
@@ -25,8 +25,11 @@ def generate_page
 			<script type="text/javascript" src="javascript/jExpand.js"></script>
                         <style>
                             body {
-                                <%= random_background %>
-                                background-size: 100% auto;
+                                background: url('<%= random_background %>') no-repeat center center fixed; 
+                                -webkit-background-size: cover;
+                                -moz-background-size: cover;
+                                -o-background-size: cover;
+                                background-size: cover;
                             }
                         </style>
 		</head>

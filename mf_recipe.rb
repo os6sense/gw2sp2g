@@ -7,29 +7,42 @@ require_relative 'mf_recipe_components'
 
 # == Base class
 class MFRRecipe
+        # component_name:: Required parameter which defines the name of the target combine
 	def initialize component_name
-		@component_name = component_name
-		@BASE_QUANTITY = 0
-		@@mfrc = MFRecipeComponents.new # static class which holds all the recipies and components. 
+	    @component_name = component_name
+	    @BASE_QUANTITY = 0
+	    @@mfrc = MFRecipeComponents.new # static class which holds all the recipies and components.
 	end
 
 	def self.table_header
 		# Generates a table header for HTML output
-		"<thead><th></th><th>Target Component</th><th>Profit: Per SP (Per Combine)</th><th>Value</th>" +
-		"<th>Cost</th></thead>"
+                %{
+		    <thead><th></th><th>Target Component</th><th>Profit: <br/>Per SP (Per Combine)</th><th>Value</th>
+		    <th>Cost</th><th>Recipe</th></thead>
+                }
 	end
 
 	def as_tr cls
 		# Generates pricing/cost information as a table row for HTML output
 		# accepts a single parameter which is the name of the class for the tr/table row
-		"<tr class=\"#{cls}\">" +
-		"<td><img src='#{@target_img}'/></td>" +
-		"<td>#{@target_name}</td><td><b>#{@profit['per_sp']}</b> (#{@profit['max']})</td>" +
-		"<td><b>#{@value['instant']}</b> (#{@value['order']})</td><td><b>#{@cost['order']}</b>" +
-		" (#{@cost['instant']})</td></tr>\r\n"
+                %{   
+		    <tr class="#{cls}">
+		    <td><img src='#{@target_img}'/></td>
+		    <td>#{@target_name}</td><td><b>#{@profit['per_sp']}</b> <br/> (#{@profit['max']})</td>
+		    <td><b>#{@value['instant']}</b><br/> (#{@value['order']})</td><td><b>#{@cost['order']}</b>
+		    <br/> (#{@cost['instant']})</td>
+                    <td>X X X X </td>
+                    </tr>
+                }
+		#"<tr class=\"#{cls}\">" +
+		#"<td><img src='#{@target_img}'/></td>" +
+		#"<td>#{@target_name}</td><td><b>#{@profit['per_sp']}</b> <br/> (#{@profit['max']})</td>" +
+		#"<td><b>#{@value['instant']}</b><br/> (#{@value['order']})</td><td><b>#{@cost['order']}</b>" +
+		#"<br/> (#{@cost['instant']})</td>" +
+                #"</tr>\r\n"
 	end
 
-	def calc_profits target_tier_component, sale_cost, offer_cost 
+	def calc_profits target_tier_component, sale_cost, offer_cost
 		# Internal method, calculates profits and resale values and assigns them to instance level attibutes
 		result_sale_value = target_tier_component.price.sale * @result_avg
 		result_offer_value = target_tier_component.price.offer * @result_avg
@@ -42,7 +55,7 @@ class MFRRecipe
 			    "instant" => GoldPrice.to_g(sale_cost)
 		}
 		@value = { "order" => GoldPrice.to_g(result_offer_value),
-		   	   "instant" => GoldPrice.to_g(result_sale_value),
+			   "instant" => GoldPrice.to_g(result_sale_value),
 		}
 		@profit = { "max" => GoldPrice.to_g(profit_max),
 			   "per_sp" => GoldPrice.to_g(profit_per_skill_point)
@@ -82,9 +95,6 @@ class CommonRecipe < CraftingMaterialRecipe
 		@BASE_QUANTITY = 250
 		@result_avg = 80
 		@result_avg = 20 if tier==6
-		
-	
-		
 		@sp_component = Component.new "Philosopher's Stone", 0, @target_tier * 0.1 
 		forge
 	end
@@ -112,8 +122,24 @@ class LodestoneRecipe <  CraftingMaterialRecipe
         def initialize component_name, tier
 		super(component_name, tier)
 		@BASE_QUANTITY = 2
-		@result_avg = 1 
+		@result_avg = 1
+                # 2560 is for wine
 		@calc_cost = lambda {|btc, ttc, dc| (btc * @BASE_QUANTITY) + 2560 + (dc * 1)}
+		@sp_component = Component.new "Crystals", 0, 0.8333
+		forge
+	end
+
+	def as_tr
+		super (@target_tier==5?"lvl1":"lvl2") 
+	end
+end
+
+class DustRecipe <  CraftingMaterialRecipe
+        def initialize component_name, tier
+		super(component_name, tier)
+		@BASE_QUANTITY = 250
+		@result_avg =  20
+		@calc_cost = lambda {|btc, ttc, dc| (btc * @BASE_QUANTITY) + ttc }
 		@sp_component = Component.new "Crystals", 0, 0.8333
 		forge
 	end
@@ -129,11 +155,11 @@ class MysticWeaponRecipe < MFRRecipe
 		super(component_name)
 		@sp_component = Component.new "Eldritch Scroll",0, 50
 		@calc_cost = lambda {|cc, c1, c2| (cc * 30) + (c1 * 5) + (c2 * 5)}
-		@result_avg = 1 
+		@result_avg = 1
 		forge
 	end
 
-	def forge 
+	def forge
 		coin_comp = @@mfrc.get("Mystic Coin")
 		comp1 = @@mfrc.get("Mystic Weapon")[@component_name][1]
 		comp2 = @@mfrc.get("Mystic Weapon")[@component_name][2]
@@ -152,13 +178,12 @@ class MysticWeaponRecipe < MFRRecipe
 end
 
 class MysticForgeRecipe < MFRRecipe
-	
         def initialize component_name, type="Mystic Forge"
-		super(component_name)
-		@type = type
-		@sp_component = Component.new "Eldritch Scroll",0, 50
-		@result_avg = 1 
-		forge
+	    super(component_name)
+	    @type = type
+	    @sp_component = Component.new "Eldritch Scroll",0, 50
+	    @result_avg = 1 
+	    forge
 	end
 
 	def forge 
@@ -185,27 +210,28 @@ class MysticForgeRecipe < MFRRecipe
 	end
 
 	def self.each &block
-		type="Mystic Forge"
-		@@mfrc.get(type).keys.each &block 
+            # Provide a method to iterate over all the "Mystic Forge" items
+            # without having to directly refence them
+	    type="Mystic Forge"
+	    @@mfrc.get(type).keys.each &block
 	end
 
 	def as_tr
-		super "lvl0"
+            # Output as html for use within an html table
+	    super "lvl0"
 	end
 end
 
 class GiftRecipe < MysticForgeRecipe 
 	attr_accessor :price
         def initialize component_name
-		super(component_name, "Gift")
+	    super(component_name, "Gift")
 	end
 
 	def calc_profits result_comp, sale_cost, offer_cost
-		@price = GoldPrice.new(0, sale_cost, offer_cost)
-		warn @price.sale
+	    @price = GoldPrice.new(0, sale_cost, offer_cost)
+	    warn @price.sale
 	end
-
-	
 end
 
 # == Dust Recipie

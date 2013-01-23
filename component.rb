@@ -8,8 +8,6 @@ class Component
 	include GW2Spidy
 
 	# name:: blah name
-	# :id blah id
-	# price: blay price
 	# img:: blah image
 	attr_accessor :name, :id, :price, :img
 

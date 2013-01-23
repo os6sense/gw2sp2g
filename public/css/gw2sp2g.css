@@ -20,6 +20,8 @@ body {
         text-align:left;
 	border-radius: 5px;
         background: #ffffff;
+        opacity:0.9;
+        filter:alpha(opacity=90); /* For IE8 and earlier */
 }
 
 table {
@@ -38,7 +40,7 @@ td:first-child {
 }
 
 td {
-	width: 200px;
+	width: 211px;
 	text-align:left;
 	font-size: 12px;
 }
