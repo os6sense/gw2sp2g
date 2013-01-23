@@ -30,8 +30,9 @@ def generate_page
 		</head>
 		<body>
 		<div id="wrapper">
-			<h1>Skill Point To Gold Values</h1>
+			<h1>Skill Point To Gold Values - ALPHA VERSION</h1>
 			<p id="intro">
+                                ** Please note that this is a work in progress and no guarentees are made as to the acuracy of these figures. <br/>
 				This page attempts to show the current values of conversions that you can make using skill points at the Mystic Forge. It uses prices from gw2spidy which are refreshed every 15 minutes, hence there my be some difference between current trading post values/costs and those displayed. <br/><br/>
 				Costs are provided illustrating the price based on both buying via a buy order or buying instantly. Value is displayed showing the current trading post sale price before taxes.
 				Profit per SP is calculated after all taxes and fees have been deducted and is based on selling at the current \"Buy it instantly\" price on the trading post. 

@@ -24,66 +24,79 @@ class Array
             1
         end
     end
+
+    def name
+        self[0].name
+    end
 end
 
 
 # == Base class
 class MFRRecipe
-        # component_name:: Required parameter which defines the name of the target combine
-	def initialize component_name
-	    @component_name = component_name
-	    @BASE_QUANTITY = 0
-	    @@mfrc = MFRecipeComponents.new # static class which holds all the recipies and components.
-	    @comps = []
-	end
+    # component_name:: Required parameter which defines the name of the target combine
+    def initialize component_name
+        @component_name = component_name
+        @BASE_QUANTITY = 0
+        @@mfrc = MFRecipeComponents.new # static class which holds all the recipies and components.
+        @comps = []
+    end
 
-	def self.table_header
-		# Generates a table header for HTML output
-                %{
-		    <thead><th></th><th>Target Component</th><th>Profit: <br/>Per SP (Per Combine)</th><th>Value</th>
-		    <th>Cost</th><th>Recipe</th></thead>
-                }
-	end
+    def self.table_header
+        # Generates a table header for HTML output
+            %{
+                <thead><th></th><th>Target Component</th><th>Profit: <br/>Per SP (Per Combine)</th><th>Value</th>
+                <th>Cost</th><th>Recipe</th></thead>
+            }
+    end
 
-	def as_tr cls
-		# Generates pricing/cost information as a table row for HTML output
-		# accepts a single parameter which is the name of the class for the tr/table row
-                str = %{
-		    <tr class="#{cls}">
-		    <td><img src='#{@target_img}'/></td>
-		    <td>#{@target_name}</td><td><b>#{@profit['per_sp']}</b> <br/> (#{@profit['max']})</td>
-		    <td><b>#{@value['instant']}</b><br/> (#{@value['order']})</td><td><b>#{@cost['order']}</b>
-		    <br/> (#{@cost['instant']})</td>
-                    <td>
-                }
+    def as_tr cls
+        # Generates pricing/cost information as a table row for HTML output
+        # accepts a single parameter which is the name of the class for the tr/table row
+        str = %{
+            <tr class="#{cls}">
+            <td><img src='#{@target_img}'/></td>
+            <td>#{@target_name}</td><td><b>#{@profit['per_sp']}</b> <br/> (#{@profit['max']})</td>
+            <td><b>#{@value['instant']}</b><br/> (#{@value['order']})</td><td><b>#{@cost['order']}</b>
+            <br/> (#{@cost['instant']})</td>
+            <td style="vertical-align:middle;">
+        }
 
-                (0..2).each do |i| 
-                        str += %{<img style="width:16px;height:16px" title="blah" src="#{@comps[i].img}"/>#{@comps[i].quantity}(#{GoldPrice.to_g(@comps[i].price.offer)})"}
-                end
-                str += %{  </td>
-                    </tr>
-                }
-	end
+        (0..2).each do |i|
+            tp = ""
+            if @comps[i].quantity > 1
+                tp = "Total: " + GoldPrice.to_g(@comps[i].quantity * @comps[i].price.offer)
+            end
+            str += %{
+                <img style="width:25;height:25px" title="#{@comps[i].name}
+                #{GoldPrice.to_g(@comps[i].price.offer)} each  #{tp}" src="#{@comps[i].img}"/>&nbsp;x #{@comps[i].quantity}&nbsp;
+            }
+        end
 
-	def calc_profits target_tier_component, sale_cost, offer_cost # :no_doc
-		# Internal method, calculates profits and resale values and assigns them to instance level attibutes
-		result_sale_value = target_tier_component.price.sale * @result_avg
-		result_offer_value = target_tier_component.price.offer * @result_avg
-		profit_max = ((result_sale_value * 0.85) - offer_cost).round()
-		profit_per_skill_point = profit_max / @sp_component.price.value
+        str += %{
+            </td>
+            </tr>
+        }
+    end
 
-		@target_name = target_tier_component.name
-		@target_img = target_tier_component.img
-		@cost = {  "order" => GoldPrice.to_g(offer_cost),
-			    "instant" => GoldPrice.to_g(sale_cost)
-		}
-		@value = { "order" => GoldPrice.to_g(result_offer_value),
-			   "instant" => GoldPrice.to_g(result_sale_value),
-		}
-		@profit = { "max" => GoldPrice.to_g(profit_max),
-			   "per_sp" => GoldPrice.to_g(profit_per_skill_point)
-		}
-	end
+    def calc_profits target_tier_component, sale_cost, offer_cost # :no_doc
+        # Internal method, calculates profits and resale values and assigns them to instance level attibutes
+        result_sale_value = target_tier_component.price.sale * @result_avg
+        result_offer_value = target_tier_component.price.offer * @result_avg
+        profit_max = ((result_sale_value * 0.85) - offer_cost).round()
+        profit_per_skill_point = profit_max / @sp_component.price.value
+
+        @target_name = target_tier_component.name
+        @target_img = target_tier_component.img
+        @cost = {  "order" => GoldPrice.to_g(offer_cost),
+                    "instant" => GoldPrice.to_g(sale_cost)
+        }
+        @value = { "order" => GoldPrice.to_g(result_offer_value),
+                    "instant" => GoldPrice.to_g(result_sale_value),
+        }
+        @profit = { "max" => GoldPrice.to_g(profit_max),
+                    "per_sp" => GoldPrice.to_g(profit_per_skill_point)
+        }
+    end
 end
 
 class CraftingMaterialRecipe < MFRRecipe
@@ -142,7 +155,7 @@ class LodestoneRecipe <  CraftingMaterialRecipe
 		super(component_name, tier)
 		@BASE_QUANTITY = 2
 		@result_avg = 1
-                # 2560 is for wine
+                # 2560 is for wine, this needs to be added as a valid component
 		@calc_cost = lambda {|btc, ttc, dc| (btc * @BASE_QUANTITY) + 2560 + (dc * 1)}
 		@sp_component = Component.new "Crystals", 0, 0.8333
 		forge
@@ -164,7 +177,7 @@ class DustRecipe <  CraftingMaterialRecipe
 	end
 
 	def as_tr cls=""
-		super (@target_tier==5?"lvl1":"lvl2") 
+		super (@target_tier==5?"lvl1":"lvl2")
 	end
 end
 
@@ -225,6 +238,7 @@ class MysticForgeRecipe < MFRRecipe
 
 		sale_cost = @comps.inject(0.0) { | sum, el | sum + (el[0].price.sale * el[1]) }
 		offer_cost = @comps.inject(0.0) { | sum, el | sum + (el[0].price.offer * el[1]) }
+
 		calc_profits(result_comp, sale_cost, offer_cost)
 	end
 
@@ -242,9 +256,10 @@ class MysticForgeRecipe < MFRRecipe
 end
 
 class GiftRecipe < MysticForgeRecipe
-	attr_accessor :price, :img, :quantity
+	attr_accessor :name, :price, :img, :quantity
         def initialize component_name
 	    super(component_name, "Gift")
+            @name = component_name
             @img = ""
             @quantity = 1
 	end

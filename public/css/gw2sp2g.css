@@ -40,18 +40,21 @@ td:first-child {
 }
 
 td {
-	width: 211px;
+	width: 140px;
 	text-align:left;
 	font-size: 12px;
+}
+
+td:last-child {
+	width: 220px;
 }
 
 .lvl1 td {
 	font-style: bold;
 }
 
-
 .lvl2 td {
-	padding-left: 0px;
+	padding-left: 10px;
 	font-style: normal;
 }
 caption, th, td {

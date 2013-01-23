@@ -1,5 +1,6 @@
 require_relative 'gw2spidy'
-class Price 
+
+class Price
  	attr_accessor :name, :value
         def initialize (name, val=0)
             @name = name
@@ -7,7 +8,7 @@ class Price
         end
 end
 
-class SkillPointPrice < Price 
+class SkillPointPrice < Price
         def initialize (val=0)
 		super("Skill Point", val)
 	end
@@ -15,7 +16,7 @@ end
 
 class GoldPrice < Price
 	include GW2Spidy
- 	attr_accessor :sale, :offer 
+	attr_accessor :sale, :offer
         def initialize (id, val=0, o_val=0)
 		super("Gold", val)
 		@o_val = o_val
@@ -40,12 +41,12 @@ class GoldPrice < Price
 		end
 
 		s_tmp = val.round.to_s
-		s = s_tmp.size 
-		
+		s = s_tmp.size
+
 		if s > 4 then
 			r += s_tmp[0, s-4] + 'g '
 			s_tmp=s_tmp[s-4, 4 ]
-			s = s_tmp.size 
+			s = s_tmp.size
 		end
 
 		if s > 2 then
