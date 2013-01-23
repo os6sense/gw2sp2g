@@ -1,7 +1,6 @@
 # == description: Responsible for generating the main "index" page, tying all the other components together.
 # The "main" of the application
 require 'erb'
-
 require_relative 'page_fragments'
 
 def random_background
@@ -9,10 +8,6 @@ def random_background
         "https://d3b4yo2b5lbfy.cloudfront.net/wp-content/uploads/wallpapers/HumanBonusWP02-1280x960.jpg"
     ]
     "#{urls.sample}"
-
-    
-
-
 end
 
 def generate_page
