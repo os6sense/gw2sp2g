@@ -45,6 +45,7 @@ def generate_page
 			<%= common_crafting_materials %>
 			<p>NB: Average Fine yield assumed to be 6 for T5->T6. Lower tier yield is currently unknown thus defaults to 6.<p>
 			<%= fine_crafting_materials %>
+			<%= dust %>
 			<%= lodestones %>
 			<%= mystic_weapons %>
 			<%= mystic_forge_recipes %>

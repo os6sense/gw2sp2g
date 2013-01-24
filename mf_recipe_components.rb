@@ -175,7 +175,7 @@ class MFRecipeComponents
 
 # Gifts
 "Gift" => [{
-    "Gift Of Light" => [ [Component.new("Gift Of Light", 0)], [Component.new("Orichalcum Ingot", 19685), 250], [Component.new("Cured Hardened Leather Square",19737 ), 250], [Component.new("Charged Lodestone", 24305 ), 100] ]
+    "Gift Of Light" => [ [Component.new("Gift Of Light", 19632)], [Component.new("Orichalcum Ingot", 19685), 250], [Component.new("Cured Hardened Leather Square",19737 ), 250], [Component.new("Charged Lodestone", 24305 ), 100] ]
 #	"Gift Of Spiders" => [ ],
 #	"Gift Of Lightning" => [ ],
 #	"Gift Of Souls" => [ ],

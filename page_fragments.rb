@@ -21,6 +21,22 @@ def lodestones
     ERB.new(template).result(binding)
 end
 
+def dust
+    template = %{
+        <table id="common">
+            <caption>Dust</caption>
+            <%= CommonRecipe.table_header %>
+            <% ["Dust" ].each do | mat |%>
+                <% 6.downto(2).each do | i | %>
+                    <%= DustRecipe.new(mat, i).as_tr %>
+                <% end %>
+            <% end %>
+        </table>
+    }
+
+    ERB.new(template).result(binding)
+end
+
 def common_crafting_materials
     template = %{
         <table id="common">
