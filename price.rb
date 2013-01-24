@@ -9,8 +9,10 @@ class Price
 end
 
 class SkillPointPrice < Price
+	attr_accessor :sale, :offer
         def initialize (val=0)
 		super("Skill Point", val)
+		@sale = @offer = val
 	end
 end
 

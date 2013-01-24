@@ -2,7 +2,7 @@
 
 require 'erb'
 require_relative 'mf_recipe'
-require_relative 'component'
+#require_relative 'component'
 #require_relative 'price'
 
 def lodestones

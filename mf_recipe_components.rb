@@ -174,34 +174,36 @@ class MFRecipeComponents
     }],
 
 # Gifts
-"Gift" => [{
-    "Gift Of Light" => [ [Component.new("Gift Of Light", 19632)], [Component.new("Orichalcum Ingot", 19685), 250], [Component.new("Cured Hardened Leather Square",19737 ), 250], [Component.new("Charged Lodestone", 24305 ), 100] ]
-#	"Gift Of Spiders" => [ ],
-#	"Gift Of Lightning" => [ ],
-#	"Gift Of Souls" => [ ],
-#	"Gift Of The Moon" => [ ],
-#	"Gift Of Ice" => [ ]
-}],
+    "Gift" => [{
+        "Gift Of Light" => [ [Component.new("Gift Of Light", 19632)], [Component.new("Orichalcum Ingot", 19685), 250], [Component.new("Cured Hardened Leather Square",19737 ), 250], [Component.new("Charged Lodestone", 24305 ), 100] ]
+    #	"Gift Of Spiders" => [ ],
+    #	"Gift Of Lightning" => [ ],
+    #	"Gift Of Souls" => [ ],
+    #	"Gift Of The Moon" => [ ],
+    #	"Gift Of Ice" => [ ]
+    }],
 
-# "Other" Mystic forge recipies
-"Mystic Forge" => [{
-	"Accursed Chains" => [Component.new("Accursed Chains", 31046), ["Mystic Coin", 30], [Component.new("Steel Ingot", 19688 ), 250], [Component.new("Orichalcum Ingot", 19685), 50]],
-	"Abyssal Scepter" => [Component.new("Abyssal Scepted", 31058), ["Mystic Coin", 100], [Component.new("Glob Of Ectoplasm", 19721 ), 250], [Component.new("Ancient Scepter Rod", 12976), 250]],
+    # "Other" Mystic forge recipies
+    "Mystic Forge" => [{
+	"Accursed Chains" => [Component.new("Accursed Chains", 31046), ["Mystic Coin", 30], [Component.new("Steel Ingot", 19688 ), 250], ["Orichalcum Ingot", 50]],
+	"Abyssal Scepter" => [Component.new("Abyssal Scepted", 31058), ["Mystic Coin", 100], ["Glob Of Ectoplasm", 250], [Component.new("Ancient Scepter Rod", 12976), 250]],
 	"Aether" => [Component.new("Aether", 31074), ["Mystic Coin", 100], ["Gift Of Light", 1], [Component.new("Ancient Shortbow Stave", 12947), 250]],
 	"Azureflame" => [Component.new("Azureflame", 31071), ["Mystic Coin", 100], ["Gift Of Light", 1], [Component.new("Ancient Longbow Stave", 12941), 250]],
-	"Coogouloosh" => [Component.new("Cooguloosh", 31040), ["Mystic Coin", 30], [Component.new("Coral Orb", 24522 ), 30 ], [Component.new("Opal Orb", 24510), 30]],
+	"Coogouloosh" => [Component.new("Cooguloosh", 31040), ["Mystic Coin", 30], ["Coral Orb", 30 ], ["Opal Orb", 30]],
 	#"Cragstone" => [Component.new("Cragstone", 31059), ["Mystic Coin", 100], [Component.new("Coral Orb", 24522 ), 30 ], [Component.new("Opal Orb", 24510), 30]],
-	"The Anomoly" => [Component.new("The Anomoly", 31045), ["Mystic Coin", 100], [Component.new("Coral Orb", 24522 ), 1 ], ["Glob Of Ectoplasm", 250]],
+	"The Anomoly" => [Component.new("The Anomoly", 31045), ["Mystic Coin", 100], ["Coral Orb", 1 ], ["Glob Of Ectoplasm", 250]],
 
 
-			}],
-        "Glob Of Ectoplasm" => [ Component.new("Glob Of Ectoplasm", 19721) ],
-        "Mystic Coin" => [ Component.new("Mystic Coin", 19976) ],
-        "Bottle Of Elonian Wine" => [Component.new("Bottle of Elonian Wine", 19633, 2630)]
-	}
+    }],
+    "Orichalcum Ingot" => [Component.new("Orichalcum Ingot", 19685) ],
+    "Opal Orb" => [Component.new("Opal Orb", 24510) ],
+    "Coral Orb" => [Component.new("Coral Orb", 24522 ) ],
+    "Glob Of Ectoplasm" => [ Component.new("Glob Of Ectoplasm", 19721) ],
+    "Mystic Coin" => [ Component.new("Mystic Coin", 19976) ],
+    "Bottle Of Elonian Wine" => [Component.new("Bottle of Elonian Wine", 19633, 2630)]
 
 
-
+}
 
     end
 

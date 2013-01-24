@@ -28,7 +28,7 @@ body {
     float: left;
     width: 65px;
     display:table-cell;
-    vertical-align:middle;
+    vertical-align:text-bottom;
     height:32px;
 }
 

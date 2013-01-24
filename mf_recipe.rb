@@ -42,12 +42,12 @@ class MFRRecipe
 
         @@mfrc = MFRecipeComponents.new # static class which holds all the recipies and components.
         @comps = []
-        @sp_quantity = 1
     end
 
     private
     def calc_profits sale_cost, offer_cost # :no_doc
         # Internal method, calculates profits and resale values and assigns them to instance level attibutes
+ 
         result_sale_value = @result_component.price.sale * @result_avg
         result_offer_value = @result_component.price.offer * @result_avg
 
@@ -89,14 +89,14 @@ class MFRRecipe
         }
 
         (0..2).each do |i|
-            tp = ""
-            if @comps[i].quantity > 1
-                tp = "Total: " + GoldPrice.to_g(@comps[i].quantity * @comps[i].price.offer)
-            end
-            str += %{
-                <span class="rc"><img style="width:25;height:25px" title="#{@comps[i].name}
-                #{GoldPrice.to_g(@comps[i].price.offer)} each  #{tp}" src="#{@comps[i].img}"/>&nbsp;x #{@comps[i].quantity}&nbsp;</span>
-            }
+                tp = ""
+                if @comps[i].quantity > 1
+                    tp = "Total: " + GoldPrice.to_g(@comps[i].quantity * @comps[i].price.offer)
+                end
+                str += %{
+                    <span class="rc"><img style="width:25;height:25px" title="#{@comps[i].name}
+                    #{GoldPrice.to_g(@comps[i].price.offer)} each  #{tp}" src="#{@comps[i].img}"/>&nbsp;x #{@comps[i].quantity}&nbsp;</span>
+                }
         end
 
         str += %{<span class="rc"><img style="width:25;height:25px" title="#{@sp_component[0].name}" src="#{@sp_component[0].img}"/>&nbsp;x #{@sp_component[1]}&nbsp;</span>
@@ -111,8 +111,6 @@ class MFRRecipe
         assemble
         sale_cost = @comps.inject(0.0) { | sum, el | sum + (el[0].price.sale * el[1]) }
 	offer_cost = @comps.inject(0.0) { | sum, el | sum + (el[0].price.offer * el[1]) }
-       # sale_cost = @calc_cost[ @comps[0].price.sale, @comps[1].price.sale, @comps[2].price.sale ]
-        #offer_cost = @calc_cost[ @comps[0].price.offer, @comps[1].price.offer, @comps[2].price.offer ]
         calc_profits(sale_cost, offer_cost)
     end
 
@@ -123,7 +121,6 @@ class CraftingMaterialRecipe < MFRRecipe
         def initialize component_name, tier, base_quantity, result_avg
 		super(component_name, base_quantity, result_avg)
 		@target_tier = tier
-		#@calc_cost = lambda {|btc, ttc, dc| (btc * @base_quantity) + ttc + (dc * (@target_tier - 1))}
 		@sp_component = [Component.new("Philosopher's Stone", 0, 0.1), tier-1]
 
 		@result_component = @@mfrc.get(@component_name, @target_tier)
@@ -164,8 +161,6 @@ end
 class LodestoneRecipe <  CraftingMaterialRecipe
         def initialize component_name, tier
 		super(component_name, tier, 2, 1)
-                # 2560 is for wine, this needs to be added as a valid component
-		#@calc_cost = lambda {|btc, ttc, dc| (btc * @base_quantity) + 2560 + (dc * 1)}
 		@sp_component = [Component.new("Crystals", 0, 0.6), 1]
 		forge
 	end
@@ -182,12 +177,18 @@ class LodestoneRecipe <  CraftingMaterialRecipe
 end
 
 class DustRecipe <  CraftingMaterialRecipe
-        def initialize component_name, tier
-            super(component_name, tier, 250, 20)
-            #@calc_cost = lambda {|btc, ttc, dc| (btc * @base_quantity) + ttc }
-            @sp_component = [Component.new("Crystals", 0, 0.6), 5]
-            forge
-	end
+    def initialize component_name, tier
+        super(component_name, tier, 250, 20)
+        @sp_component = [Component.new("Crystals", 0, 0.6), 5]
+        forge
+    end
+
+    def assemble
+        super
+        @comps.pop
+        @comps << [[Component.new("Philosopher's Stone", 0, 0.1), @target_tier -1], @target_tier -1]
+        #@comps << [@@mfrc.get("Mystic Weapon")[@component_name][2], 5]
+    end
 end
 
 # == Weapon Recipe
@@ -196,8 +197,7 @@ class MysticWeaponRecipe < MFRRecipe
         super(component_name, 0, 1)
 
         @result_component = @@mfrc.get("Mystic Weapon")[@component_name][0]
-        #@calc_cost = lambda {|cc, c1, c2| (cc * 30) + (c1 * 5) + (c2 * 5)}
-        @result_avg = 1
+        # @result_avg = 1
         @sp_component = [Component.new("Eldritch Scroll",0, 50), 1]
         forge
     end
@@ -242,7 +242,7 @@ class MysticForgeRecipe < MFRRecipe
 	def self.each &block
             # Provide a method to iterate over all the "Mystic Forge" items
             # without having to directly refence them
-	    type="Mystic Forge"
+            type="Mystic Forge"
 	    @@mfrc.get(type).keys.each &block
 	end
 end

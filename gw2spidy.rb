@@ -19,7 +19,7 @@ module GW2Spidy
 		rescue Memcached::NotFound => e
                         begin
 			    result = yield
-			    $memcached.set(cache_key, result, 900)
+			    $memcached.set(cache_key, result, 1800)
 			    result
                         rescue
 		            {}
