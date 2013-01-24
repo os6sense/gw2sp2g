@@ -1,7 +1,7 @@
 require_relative 'gw2spidy'
 
 class Price
- 	attr_accessor :name, :value
+	attr_accessor :name, :value
         def initialize (name, val=0)
             @name = name
             @value = val
@@ -28,8 +28,13 @@ class GoldPrice < Price
 			@value == 0 ? @sale = @offer = 0 : (@sale,@offer=@value,@o_val)
 		else
 			data = self.getByID(id)
-			@sale = data["min_sale_unit_price"]
-			@offer = data["max_offer_unit_price"]
+                        if @value == 0
+			    @sale = data["min_sale_unit_price"]
+			    @offer = data["max_offer_unit_price"]
+                        else
+                            @sale = @value
+                            @offer = @value
+                        end
 		end
 	end
 

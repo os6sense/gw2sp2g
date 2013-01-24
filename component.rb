@@ -14,18 +14,20 @@ class Component
 	# Create a new Component
 	# name::  Human readable identifyier to aid in identifying the component
 	# id:: The GW2Spidy identifier (numeric e.g. 13928) for the Component
-	# spprice:: - Skill Point Price, the cost of the Component in Skill points rather than gold
-	# Only supply this if the price is in skill points rather than in gold
-        def initialize name, id, spprice=0
-	    if id == 0
-		@price = SkillPointPrice.new spprice
-		@img = ''
-	    else
-		@price = GoldPrice.new id
-		@img = self.getByID(id)['img']
-	    end
+	# price:: - The cost of the Component. If id is 0 the the price is taken to 
+        # be in Skill points rather than gold
+        def initialize name, id, price=0
 	    @id = id
             @name = name
+
+            # code smell - factory please?
+	    if id == 0
+		@price = SkillPointPrice.new(price)
+		@img = ''
+	    else
+		@price = GoldPrice.new(id, price)
+		@img = self.getByID(id)['img']
+	    end
 	end
 end
 

@@ -195,8 +195,10 @@ class MFRecipeComponents
 
 
 			}],
-                        "Glob Of Ectoplasm" => [ Component.new("Glob Of Ectoplasm", 19721) ],
-			"Mystic Coin" => [ Component.new("Mystic Coin", 19976) ]
+        "Glob Of Ectoplasm" => [ Component.new("Glob Of Ectoplasm", 19721) ],
+        "Mystic Coin" => [ Component.new("Mystic Coin", 19976) ],
+        "Bottle Of Elonian Wine" => [Component.new("Bottle of Elonian Wine", 19633, 2630)]
+        
 	}
     end
 

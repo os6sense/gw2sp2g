@@ -107,19 +107,22 @@ class CraftingMaterialRecipe < MFRRecipe
 		@result_avg = 6
 		@calc_cost = lambda {|btc, ttc, dc| (btc * @BASE_QUANTITY) + ttc + (dc * @base_tier)}
 		@sp_component = Component.new "Philosopher's Stone", 0, 0.5
+		@result_component = @@mfrc.get(@component_name, @target_tier)
 	end
 
-	def forge
-		result_component = @@mfrc.get(@component_name, @target_tier)
-
+        def assemble
 		@comps << [@@mfrc.get(@component_name, @base_tier), @BASE_QUANTITY]
                 @comps << [@@mfrc.get(@component_name, @target_tier), 1]
 		@comps << [@@mfrc.get("Dust", @target_tier), @base_tier]
+        end
+
+	def forge
+                assemble
 
 		sale_cost = @calc_cost[ @comps[0].price.sale, @comps[1].price.sale, @comps[2].price.sale ]
 		offer_cost = @calc_cost[ @comps[0].price.offer, @comps[1].price.offer, @comps[2].price.offer ]
 
-		calc_profits(result_component, sale_cost, offer_cost)
+		calc_profits(@result_component, sale_cost, offer_cost)
 	end
 
 	def as_tr cls=""
@@ -150,6 +153,7 @@ class FineRecipe < CraftingMaterialRecipe
 end
 
 # == Core/Lodestone
+# BUG: The lodestone isnt a component in this recipie
 class LodestoneRecipe <  CraftingMaterialRecipe
         def initialize component_name, tier
 		super(component_name, tier)
@@ -160,6 +164,14 @@ class LodestoneRecipe <  CraftingMaterialRecipe
 		@sp_component = Component.new "Crystals", 0, 0.8333
 		forge
 	end
+
+        def assemble
+
+		@comps << [@@mfrc.get(@component_name, @base_tier), @BASE_QUANTITY]
+                @comps << [@@mfrc.get("Bottle Of Elonian Wine"), 1]
+		@comps << [@@mfrc.get("Dust", @target_tier), @base_tier]
+
+        end
 
 	def as_tr cls=""
 		super (@target_tier==5?"lvl1":"lvl2")
@@ -188,20 +200,23 @@ class MysticWeaponRecipe < MFRRecipe
 		@sp_component = Component.new "Eldritch Scroll",0, 50
 		@calc_cost = lambda {|cc, c1, c2| (cc * 30) + (c1 * 5) + (c2 * 5)}
 		@result_avg = 1
+		@result_comp = @@mfrc.get("Mystic Weapon")[@component_name][0]
 		forge
 	end
 
-	def forge
-		result_comp = @@mfrc.get("Mystic Weapon")[@component_name][0]
-
+        def assemble
 		@comps << [@@mfrc.get("Mystic Coin"), 30]
 		@comps << [@@mfrc.get("Mystic Weapon")[@component_name][1], 5]
 		@comps << [@@mfrc.get("Mystic Weapon")[@component_name][2], 5]
+        end
+
+	def forge
+                assemble
 
 		sale_cost = @calc_cost[ @comps[0].price.sale, @comps[1].price.sale, @comps[2].price.sale ]
 		offer_cost = @calc_cost[ @comps[0].price.offer, @comps[1].price.offer, @comps[2].price.offer ]
 
-		calc_profits(result_comp, sale_cost, offer_cost)
+		calc_profits(@result_comp, sale_cost, offer_cost)
 	end
 
 	def as_tr
@@ -215,12 +230,11 @@ class MysticForgeRecipe < MFRRecipe
 	    @type = type
 	    @sp_component = Component.new "Eldritch Scroll",0, 50
 	    @result_avg = 1
+            @result_comp = @@mfrc.get(@type)[@component_name][0]
 	    forge
 	end
 
-	def forge
-		result_comp = @@mfrc.get(@type)[@component_name][0]
-
+        def assemble
 		(1..3).each do |i|
 			@comps << @@mfrc.get(@type)[@component_name][i]
                         # deal with the circumstance where we have a string rather than a component
@@ -235,11 +249,15 @@ class MysticForgeRecipe < MFRRecipe
 				end
 			end
 		end
+        end
+
+	def forge
+                assemble
 
 		sale_cost = @comps.inject(0.0) { | sum, el | sum + (el[0].price.sale * el[1]) }
 		offer_cost = @comps.inject(0.0) { | sum, el | sum + (el[0].price.offer * el[1]) }
 
-		calc_profits(result_comp, sale_cost, offer_cost)
+		calc_profits(@result_comp, sale_cost, offer_cost)
 	end
 
 	def self.each &block
@@ -276,4 +294,3 @@ end
 
 
 # == Skill Point components
-#elonian_wine = Component.new("Bottle of Elonian Wine", 19633)
