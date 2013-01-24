@@ -110,14 +110,14 @@ class CraftingMaterialRecipe < MFRRecipe
 		@result_component = @@mfrc.get(@component_name, @target_tier)
 	end
 
-        def assemble
+        def assemble()
 		@comps << [@@mfrc.get(@component_name, @base_tier), @BASE_QUANTITY]
                 @comps << [@@mfrc.get(@component_name, @target_tier), 1]
 		@comps << [@@mfrc.get("Dust", @target_tier), @base_tier]
         end
 
 	def forge
-                assemble
+                assemble()
 
 		sale_cost = @calc_cost[ @comps[0].price.sale, @comps[1].price.sale, @comps[2].price.sale ]
 		offer_cost = @calc_cost[ @comps[0].price.offer, @comps[1].price.offer, @comps[2].price.offer ]
@@ -136,7 +136,7 @@ class CommonRecipe < CraftingMaterialRecipe
         def initialize component_name, tier
 		super(component_name, tier)
 		@BASE_QUANTITY = 250
-		tier == 6? @result_avg = 20 : @result_avg = 20 
+		tier == 6? @result_avg = 20 : @result_avg = 80 
 		@sp_component = Component.new "Philosopher's Stone", 0, @target_tier * 0.1
 		forge
 	end
@@ -166,11 +166,9 @@ class LodestoneRecipe <  CraftingMaterialRecipe
 	end
 
         def assemble
-
 		@comps << [@@mfrc.get(@component_name, @base_tier), @BASE_QUANTITY]
                 @comps << [@@mfrc.get("Bottle Of Elonian Wine"), 1]
-		@comps << [@@mfrc.get("Dust", @target_tier), @base_tier]
-
+		@comps << [@@mfrc.get("Dust", @target_tier+1), 1]
         end
 
 	def as_tr cls=""
