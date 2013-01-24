@@ -23,19 +23,26 @@ class Component
             # code smell - factory please?
 	    if id == 0
 		@price = SkillPointPrice.new(price)
-		@img = ''
+                setImg
 	    else
 		@price = GoldPrice.new(id, price)
 		@img = self.getByID(id)['img']
 	    end
 	end
+
+        def setImg
+            # There are only currently 4 types of skill point
+            if @name == "Crystals"
+                @img = "http://wiki.guildwars2.com/images/3/31/Crystal.png"
+            elsif @name ==  "Philosopher's Stone"
+                @img = "http://wiki.guildwars2.com/images/b/b9/Philosopher%27s_Stone.png"
+            elsif @name ==  "Eldritch Scroll"
+                @img = "http://wiki.guildwars2.com/images/5/53/Eldritch_Scroll.png"
+            elsif @name ==  "Bloodstone Shard"
+                @img = "http://wiki.guildwars2.com/images/archive/e/e7/20130101023416!Bloodstone_Shard.png"
+            end
+
+        end
 end
 
-#class MFRComponent
-#	attr_accessor :component, :quantity
-#        def initialize component, quantity
-#	    @component = component
-#	    @quantity = quantity
-#	end
-#end
 

@@ -41,8 +41,9 @@ class GoldPrice < Price
 	def self.to_g val
 		r = ""
 		if val < 0
-			val=val.abs
-			r="-"
+			#val=val.abs
+			#r="-"
+                        return '0c'
 		end
 
 		s_tmp = val.round.to_s
