@@ -29,6 +29,17 @@ def generate_page
                         </style>
 		</head>
 		<body>
+                <div id="nav">
+                    <ul>
+                        <li><a href="">Common materials</a></li>
+			<li><a href="">Fine materials</a></li>
+			<li><a href="">Dust</a></li>
+			<li><a href="">Lodestones</a></li>
+			<li><a href="#Mystic Weapons">Mystic weapons</a></li>
+			<li><a href="#Pendants">Pendants</a></li>
+			<li><a href="#Mystic Forge Recipes">Mystic forge recipes</a></li>
+                    </ul>
+                </div>
 		<div id="wrapper">
 			<h1>Skill Point To Gold Values - ALPHA VERSION</h1>
 			<p id="intro">

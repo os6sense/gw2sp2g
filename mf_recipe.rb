@@ -165,21 +165,25 @@ end
 
 # == Core/Lodestone
 class LodestoneRecipe <  CraftingMaterialRecipe
-        def initialize component_name, tier
-		super(component_name, tier, 2, 1)
-		@sp_component = [Component.new("Crystals", 0, 0.6), 1]
-		forge
-	end
+    def initialize component_name, tier
+            super(component_name, tier, 2, 1)
+            @sp_component = [Component.new("Crystals", 0, 0.6), 1]
+            forge
+    end
 
-        def assemble
-		@comps << [@@mfrc.get(@component_name, @target_tier -1), @base_quantity]
-                @comps << [@@mfrc.get("Bottle Of Elonian Wine"), 1]
-		@comps << [@@mfrc.get("Dust", @target_tier+1), 1]
-        end
+    def assemble
+            @comps << [@@mfrc.get(@component_name, @target_tier -1), @base_quantity]
+            @comps << [@@mfrc.get("Bottle Of Elonian Wine"), 1]
+            @comps << [@@mfrc.get("Dust", @target_tier+1), 1]
+    end
 
-	def as_tr
-		super (@target_tier==5?"lvl1":"lvl2")
-	end
+    def self.each &block
+       ["Charged", "Molten", "Crystal", "Destroyer", "Corrupted", "Onyx"].each &block
+    end
+
+    def as_tr
+            super (@target_tier==5?"lvl1":"lvl2")
+    end
 end
 
 class DustRecipe <  CraftingMaterialRecipe
@@ -209,6 +213,10 @@ class MysticWeaponRecipe < MFRRecipe
         @comps << [@@mfrc.get("Mystic Coin"), 30]
         @comps << [@@mfrc.get("Mystic Weapon")[@component_name][1], 5]
         @comps << [@@mfrc.get("Mystic Weapon")[@component_name][2], 5]
+    end
+
+    def self.each &block
+        @@mfrc.get("Mystic Weapon").keys.each &block
     end
 
     def as_tr

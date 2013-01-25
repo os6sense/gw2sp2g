@@ -1,11 +1,25 @@
-# == description: Individual paage fragments that will be used ny another template in order to construct the entire list
+# == description: Individual page fragments that will be used ny another template in order to construct the entire list
 
 require 'erb'
 require_relative 'mf_recipe'
-#require_relative 'component'
-#require_relative 'price'
+
+def generic caption, recipeType
+    template = %{
+        <table>
+            <caption><a name="<%= caption %>"><%= caption %></a></caption>
+            <%= recipeType.table_header %>
+            <% recipeType.each do | item |%>
+                <%= recipeType.new(item).as_tr %>
+            <% end %>
+        </table>
+    }
+
+    ERB.new(template).result(binding)
+end
 
 def lodestones
+    #generic("Lodestones", LodestoneRecipe)
+
     template = %{
         <table id="lodestones">
             <caption>Lodestones</caption>
@@ -70,43 +84,13 @@ def fine_crafting_materials
 end
 
 def mystic_weapons
-    template = %{
-        <table id="mysticweapons">
-            <caption>Mystic Weapons</caption>
-            <%= MysticWeaponRecipe.table_header %>
-            <% ["Artifact", "Barricade", "Battleaxe", "Battlehammer", "Caller", "Claymore", "Crescent", "Cudgel", "Hornbow", "Pistol", "Rifle", "Spear", "Speargun", "Spike", "Staff" ].each do | weapon |%>
-                <%= MysticWeaponRecipe.new(weapon).as_tr %>
-            <% end %>
-        </table>
-    }
-
-    ERB.new(template).result(binding)
+    generic("Mystic Weapons", MysticWeaponRecipe)
 end
 
 def mystic_forge_recipes
-    template = %{
-        <table id="mysticforgerecipes">
-            <caption>Mystic Forge Recipes</caption>
-            <%= MysticForgeRecipe.table_header %>
-            <% MysticForgeRecipe.each do | item |%>
-                <%= MysticForgeRecipe.new(item).as_tr %>
-            <% end %>
-        </table>
-    }
-
-    ERB.new(template).result(binding)
+    generic("Mystic Forge Recipes", MysticForgeRecipe)
 end
 
 def pendants
-    template = %{
-        <table id="pendants">
-            <caption>Pendants</caption>
-            <%= PendantRecipe.table_header %>
-            <% PendantRecipe.each do | item |%>
-                <%= PendantRecipe.new(item).as_tr %>
-            <% end %>
-        </table>
-    }
-
-    ERB.new(template).result(binding)
+    generic("Pendants", PendantRecipe)
 end
