@@ -96,3 +96,17 @@ def mystic_forge_recipes
 
     ERB.new(template).result(binding)
 end
+
+def pendants
+    template = %{
+        <table id="pendants">
+            <caption>Pendants</caption>
+            <%= PendantRecipe.table_header %>
+            <% PendantRecipe.each do | item |%>
+                <%= PendantRecipe.new(item).as_tr %>
+            <% end %>
+        </table>
+    }
+
+    ERB.new(template).result(binding)
+end

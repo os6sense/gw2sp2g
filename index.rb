@@ -48,6 +48,7 @@ def generate_page
 			<%= dust %>
 			<%= lodestones %>
 			<%= mystic_weapons %>
+			<%= pendants %>
 			<%= mystic_forge_recipes %>
 		</div>
 		</body>

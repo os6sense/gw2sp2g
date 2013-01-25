@@ -149,8 +149,7 @@ class MFRecipeComponents
                     Component.new("Destroyer Lodestone", 24325)
             ],
 
-# Mystic Weapons
-
+    # Mystic Weapons
     "Mystic Weapon" => [{
         "Artifact" => [Component.new("Mystic Artifact", 31083), Component.new("Ancient Focus Casing", 12982 ), Component.new("Ancient Focus Core", 13243 ) ],
         "Barricade" => [Component.new("Mystic Barricade", 31091), Component.new("Orichalcum Shield Bacing", 12906), Component.new("Orichalcum Shield Boss", 12912) ],
@@ -173,7 +172,7 @@ class MFRecipeComponents
         "Wand" => [Component.new("Mystic Wand", 31090), Component.new("Ancient Scepter Core", 13255), Component.new("Ancient Scepter Rod", 12976 )]
     }],
 
-# Gifts
+    # Gifts
     "Gift" => [{
         "Gift Of Light" => [ [Component.new("Gift Of Light", 19632)], [Component.new("Orichalcum Ingot", 19685), 250], [Component.new("Cured Hardened Leather Square",19737 ), 250], [Component.new("Charged Lodestone", 24305 ), 100] ]
     #	"Gift Of Spiders" => [ ],
@@ -192,9 +191,24 @@ class MFRecipeComponents
 	"Coogouloosh" => [Component.new("Cooguloosh", 31040), ["Mystic Coin", 30], ["Coral Orb", 30 ], ["Opal Orb", 30]],
 	#"Cragstone" => [Component.new("Cragstone", 31059), ["Mystic Coin", 100], [Component.new("Coral Orb", 24522 ), 30 ], [Component.new("Opal Orb", 24510), 30]],
 	"The Anomoly" => [Component.new("The Anomoly", 31045), ["Mystic Coin", 100], ["Coral Orb", 1 ], ["Glob Of Ectoplasm", 250]],
-
-
+        "Dreadwing" => [Component.new("Dreadwing", 31037 ), ["Mystic Coin", 10], ["Small Ancient Haft", 10], ["Onyx Lodestone", 10]],
     }],
+    "Pendant" => [{
+        "Triforge Pendant" => [Component.new("Triforge Pendant", 23095), ["Sapphire Pendant", 1],["Ruby Pendant", 1], ["Emerald Pendant",1] ],
+        "Emerald Pendant" => [Component.new("Emerald Pendant", 23096), ["Mystic Coin", 50], ["Gold Ingot", 250], ["Emerald Orb", 250] ],
+        "Ruby Pendant" => [Component.new("Ruby Pendant", 23097), ["Mystic Coin", 50], ["Gold Ingot", 250], ["Ruby Orb", 250] ],
+        "Sapphire Pendant" => [Component.new("Sapphire Pendant", 23098), ["Mystic Coin", 50], ["Gold Ingot", 250], ["Sapphire Orb", 250] ],
+    }],
+    "Onyx Lodestone" => [Component.new("Onyx Lodestone", 24310)],
+    "Small Ancient Haft" => [Component.new("Small Ancient Haft", 12892)],
+    "Pile Of Chrystaline Dust" => [ Component.new("Pile of Chrystaline Dust", 24277)],
+    "Emerald Pendant" => [Component.new("Emerald Pendant", 23096) ], #, ["Mystic Coin", 50], ["Gold Ingot", 250], ["Emerald Orb", 250], ["Pile Of Chrystaline Dust", 250]],
+    "Ruby Pendant" => [Component.new("Ruby Pendant", 23097) ], # ), ["Mystic Coin", 50], ["Gold Ingot", 250], ["Ruby Orb", 250], ["Pile Of Chrystaline Dust", 250]],
+    "Sapphire Pendant" => [Component.new("Sapphire Pendant", 23098) ], # , ["Mystic Coin", 50], ["Gold Ingot", 250], ["Sapphire Orb", 250], ["Pile Of Chrystaline Dust", 250]],
+    "Gold Ingot" => [Component.new("Gold Ingot", 19682) ],
+    "Emerald Orb" => [Component.new("Emerald Orb", 24515) ],
+    "Ruby Orb" => [Component.new("Emerald Orb", 24508) ],
+    "Sapphire Orb" => [Component.new("Sapphire Orb", 24516) ],
     "Orichalcum Ingot" => [Component.new("Orichalcum Ingot", 19685) ],
     "Opal Orb" => [Component.new("Opal Orb", 24510) ],
     "Coral Orb" => [Component.new("Coral Orb", 24522 ) ],

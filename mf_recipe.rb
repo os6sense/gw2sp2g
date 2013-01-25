@@ -44,15 +44,26 @@ class MFRRecipe
         @comps = []
     end
 
+    def forge
+        assemble
+        sale_cost = @comps.inject(0.0) { | sum, el | sum + (el[0].price.sale * el[1]) }
+	offer_cost = @comps.inject(0.0) { | sum, el | sum + (el[0].price.offer * el[1]) }
+        calc_profits(sale_cost, offer_cost)
+    end
+
     private
     def calc_profits sale_cost, offer_cost # :no_doc
         # Internal method, calculates profits and resale values and assigns them to instance level attibutes
- 
+
         result_sale_value = @result_component.price.sale * @result_avg
         result_offer_value = @result_component.price.offer * @result_avg
 
         profit_max = ((result_sale_value * 0.85) - offer_cost).round()
-        profit_per_skill_point = profit_max / ( @sp_component[0].price.value * @sp_component[1])
+        if @sp_component != nil
+            profit_per_skill_point = profit_max / ( @sp_component[0].price.value * @sp_component[1])
+        else
+            profit_per_skill_point = 0
+        end
 
         @target_name = @result_component.name
         @target_img = @result_component.img
@@ -88,7 +99,7 @@ class MFRRecipe
             <td style="vertical-align:middle;">
         }
 
-        (0..2).each do |i|
+        (0..@comps.size-1).each do |i|
                 tp = ""
                 if @comps[i].quantity > 1
                     tp = "Total: " + GoldPrice.to_g(@comps[i].quantity * @comps[i].price.offer)
@@ -99,20 +110,16 @@ class MFRRecipe
                 }
         end
 
-        str += %{<span class="rc"><img style="width:25;height:25px" title="#{@sp_component[0].name}" src="#{@sp_component[0].img}"/>&nbsp;x #{@sp_component[1]}&nbsp;</span>
-            }
+        if @sp_component != nil
+            str += %{<span class="rc"><img style="width:25;height:25px" title="#{@sp_component[0].name}" src="#{@sp_component[0].img}"/>&nbsp;x #{@sp_component[1]}&nbsp;</span>
+                }
+        end
         str += %{
             </td>
             </tr>
         }
     end
 
-    def forge
-        assemble
-        sale_cost = @comps.inject(0.0) { | sum, el | sum + (el[0].price.sale * el[1]) }
-	offer_cost = @comps.inject(0.0) { | sum, el | sum + (el[0].price.offer * el[1]) }
-        calc_profits(sale_cost, offer_cost)
-    end
 
 end
 
@@ -122,7 +129,6 @@ class CraftingMaterialRecipe < MFRRecipe
 		super(component_name, base_quantity, result_avg)
 		@target_tier = tier
 		@sp_component = [Component.new("Philosopher's Stone", 0, 0.1), tier-1]
-
 		@result_component = @@mfrc.get(@component_name, @target_tier)
 	end
 
@@ -187,7 +193,6 @@ class DustRecipe <  CraftingMaterialRecipe
         super
         @comps.pop
         @comps << [[Component.new("Philosopher's Stone", 0, 0.1), @target_tier -1], @target_tier -1]
-        #@comps << [@@mfrc.get("Mystic Weapon")[@component_name][2], 5]
     end
 end
 
@@ -195,14 +200,12 @@ end
 class MysticWeaponRecipe < MFRRecipe
     def initialize component_name
         super(component_name, 0, 1)
-
         @result_component = @@mfrc.get("Mystic Weapon")[@component_name][0]
-        # @result_avg = 1
-        @sp_component = [Component.new("Eldritch Scroll",0, 50), 1]
         forge
     end
 
     def assemble
+        @sp_component = [Component.new("Eldritch Scroll",0, 50), 1]
         @comps << [@@mfrc.get("Mystic Coin"), 30]
         @comps << [@@mfrc.get("Mystic Weapon")[@component_name][1], 5]
         @comps << [@@mfrc.get("Mystic Weapon")[@component_name][2], 5]
@@ -240,10 +243,7 @@ class MysticForgeRecipe < MFRRecipe
         end
 
 	def self.each &block
-            # Provide a method to iterate over all the "Mystic Forge" items
-            # without having to directly refence them
-            type="Mystic Forge"
-	    @@mfrc.get(type).keys.each &block
+	    @@mfrc.get("Mystic Forge").keys.each &block
 	end
 end
 
@@ -251,6 +251,7 @@ class GiftRecipe < MysticForgeRecipe
 	attr_accessor :name, :price, :img, :quantity
         def initialize component_name
 	    super(component_name, "Gift")
+
             @name = component_name
             @img = @result_component.img
             @quantity = 1
@@ -262,5 +263,22 @@ class GiftRecipe < MysticForgeRecipe
 end
 
 # == Pendant Recipe
+class PendantRecipe < MysticForgeRecipe
+        def initialize component_name
+	    super(component_name, "Pendant")
+	end
 
+        def assemble
+            super
+            if @component_name.include?("Triforge")
+	        @sp_component = [Component.new("Crystals", 0, 0.6), 50]
+            else
+                @sp_component = nil
+	        @comps << [@@mfrc.get("Dust", 6), 250]
+            end
+        end
 
+	def self.each &block
+	    @@mfrc.get("Pendant").keys.each &block
+	end
+end
