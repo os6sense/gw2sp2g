@@ -137,7 +137,7 @@ class CraftingMaterialRecipe < MFRRecipe
         def assemble()
 		@comps << [@@mfrc.get(@component_name, :position => @target_tier - 1), @base_quantity]
                 @comps << [@@mfrc.get(@component_name, :position => @target_tier), 1]
-		@comps << [@@mfrc.get("Dust", :position => @target_tier), @target_tier - 1]
+		@comps << [@@mfrc.get("Dust", :position => @target_tier), 5]
         end
 
         public
