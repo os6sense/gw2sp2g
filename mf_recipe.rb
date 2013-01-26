@@ -2,8 +2,10 @@
 # Description: Provides a mechanism to calculate the return (in terms of gold made) via converting skill points into various items at the Mystic Toil^h^h^h^hForge.
 require_relative 'mf_recipe_components'
 
-# TODO: add each method for all
-#       decouple
+# TODO: 
+#   add each method for all
+#   decouple
+#   sort out the ugly TR method
 
 # Reopen the array class to add accessors for  the circumstance where we have an
 # inner array (which is now true for all recipes) - this is primarily to avoid
@@ -129,13 +131,13 @@ class CraftingMaterialRecipe < MFRRecipe
 		super(component_name, base_quantity, result_avg)
 		@target_tier = tier
 		@sp_component = [Component.new("Philosopher's Stone", 0, 0.1), tier-1]
-		@result_component = @@mfrc.get(@component_name, @target_tier)
+		@result_component = @@mfrc.get(@component_name, :position => @target_tier)
 	end
 
         def assemble()
-		@comps << [@@mfrc.get(@component_name, @target_tier - 1), @base_quantity]
-                @comps << [@@mfrc.get(@component_name, @target_tier), 1]
-		@comps << [@@mfrc.get("Dust", @target_tier), @target_tier - 1]
+		@comps << [@@mfrc.get(@component_name, :position => @target_tier - 1), @base_quantity]
+                @comps << [@@mfrc.get(@component_name, :position => @target_tier), 1]
+		@comps << [@@mfrc.get("Dust", :position => @target_tier), @target_tier - 1]
         end
 
         public
@@ -172,9 +174,9 @@ class LodestoneRecipe <  CraftingMaterialRecipe
     end
 
     def assemble
-            @comps << [@@mfrc.get(@component_name, @target_tier -1), @base_quantity]
+            @comps << [@@mfrc.get(@component_name, :position => @target_tier -1), @base_quantity]
             @comps << [@@mfrc.get("Bottle Of Elonian Wine"), 1]
-            @comps << [@@mfrc.get("Dust", @target_tier+1), 1]
+            @comps << [@@mfrc.get("Dust", :position => @target_tier+1), 1]
     end
 
     def self.each &block
@@ -211,8 +213,10 @@ class MysticWeaponRecipe < MFRRecipe
     def assemble
         @sp_component = [Component.new("Eldritch Scroll",0, 50), 1]
         @comps << [@@mfrc.get("Mystic Coin"), 30]
-        @comps << [@@mfrc.get("Mystic Weapon")[@component_name][1], 5]
-        @comps << [@@mfrc.get("Mystic Weapon")[@component_name][2], 5]
+        #@comps << [@@mfrc.get("Mystic Weapon")[@component_name][1], 5]
+        #@comps << [@@mfrc.get("Mystic Weapon")[@component_name][2], 5]
+        @comps << [@@mfrc.get("Mystic Weapon", :subsection =>@component_name, :position =>2), 5]
+        @comps << [@@mfrc.get("Mystic Weapon", :subsection => @component_name, :position => 3), 5]
     end
 
     def self.each &block
@@ -229,24 +233,27 @@ class MysticForgeRecipe < MFRRecipe
 	    super(component_name, 0, 1)
 	    @type = type
 	    @sp_component = [Component.new("Eldritch Scroll",0, 50), 1]
-            @result_component = @@mfrc.get(@type)[@component_name][0]
+            @result_component = @@mfrc.get(@type, :subsection => @component_name, :position => 1)
+            #@result_component = @@mfrc.get(@type)[@component_name][0]
 	    forge
 	end
 
         def assemble
-		(1..3).each do |i|
-			@comps << @@mfrc.get(@type)[@component_name][i]
+		(2..4).each do |i|
+			#@comps << @@mfrc.get(@type)[@component_name][i]
+			@comps << @@mfrc.get(@type, :subsection => @component_name, :position => i)
+
                         # deal with the circumstance where we have a string rather than a component
-			if @comps[-1][0].kind_of? String
-				begin
-                                        # if its a string we should be able to look it up in the component table
-					@comps[-1][0] = @@mfrc.get(@comps[-1][0])
-				rescue
-                                        # however there is the occassional circumstance where it is a gift and needs 
-                                        # special treatment
-					@comps[-1][0] = GiftRecipe.new(@comps[-1][0])
-				end
-			end
+			#if @comps[-1][0].kind_of? String
+			#	begin
+                        #               # if its a string we should be able to look it up in the component table
+		#			@comps[-1][0] = @@mfrc.get(@comps[-1][0])
+		#		rescue
+                 #                       # however there is the occassional circumstance where it is a gift and needs 
+                  #                      # special treatment
+		#			@comps[-1][0] = GiftRecipe.new(@comps[-1][0])
+		##		end
+	#		end
 		end
         end
 
@@ -265,6 +272,10 @@ class GiftRecipe < MysticForgeRecipe
             @quantity = 1
 	end
 
+        def assemble
+            super
+        end
+
 	def calc_profits sale_cost, offer_cost
 	    @price = GoldPrice.new(0, sale_cost, offer_cost)
 	end
@@ -282,7 +293,7 @@ class PendantRecipe < MysticForgeRecipe
 	        @sp_component = [Component.new("Crystals", 0, 0.6), 50]
             else
                 @sp_component = nil
-	        @comps << [@@mfrc.get("Dust", 6), 250]
+	        @comps << [@@mfrc.get("Dust", :position => 6), 250]
             end
         end
 
