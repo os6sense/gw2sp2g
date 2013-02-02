@@ -32,7 +32,7 @@ class Component
 
         def setImg
             # There are only currently 4 types of skill point
-            if @name == "Crystals"
+            if @name == "Crystals" or @name == "Crystal"
                 @img = "http://wiki.guildwars2.com/images/3/31/Crystal.png"
             elsif @name ==  "Philosopher's Stone"
                 @img = "http://wiki.guildwars2.com/images/b/b9/Philosopher%27s_Stone.png"

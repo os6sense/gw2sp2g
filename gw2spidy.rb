@@ -19,7 +19,7 @@ module GW2Spidy
 		rescue Memcached::NotFound => e
                         begin
 			    result = yield
-			    $memcached.set(cache_key, result, 3600)
+			    $memcached.set(cache_key, result, 1800)
 			    result
                         rescue
 		            {}
@@ -28,20 +28,27 @@ module GW2Spidy
 	end
 
         # getById - get information from www.gw2spidy.com via the json api
-        # for a given id 
+        # for a given id
         # id:: id to look up on gw2spidy
 	def getByID(id)
-	   result = cached("#{id}") do
-		   url = "http://www.gw2spidy.com/api/v0.9/json/item/#{id}"
-		   resp = Net::HTTP.get_response(URI.parse(url))
-		   result = JSON.parse(resp.body)
+            result = cached("#{id}") do
+                url = "http://www.gw2spidy.com/api/v0.9/json/item/#{id}"
+                resp = Net::HTTP.get_response(URI.parse(url))
 
-		   # raise an error if 'Error' is a key
-		   if result.has_key? 'Error'
-		      raise "web service error"
-		   end
+                begin
+                    result = JSON.parse(resp.body)
+                rescue JSON::ParserError
+                    print resp.body[0]
+                    exit
 
-		   result["result"]
+                end
+
+                # raise an error if 'Error' is a key
+                if result.has_key? 'Error'
+                    raise "web service error"
+                end
+
+                result["result"]
 	   end
 	end
 end

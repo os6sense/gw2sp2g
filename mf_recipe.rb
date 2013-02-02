@@ -3,8 +3,7 @@
 require_relative 'mf_recipe_components'
 
 # TODO: 
-#   add each method for all
-#   decouple
+#   add "each" method for all
 #   sort out the ugly TR method
 
 # Reopen the array class to add accessors for  the circumstance where we have an
@@ -51,6 +50,12 @@ class MFRRecipe
         sale_cost = @comps.inject(0.0) { | sum, el | sum + (el[0].price.sale * el[1]) }
 	offer_cost = @comps.inject(0.0) { | sum, el | sum + (el[0].price.offer * el[1]) }
         calc_profits(sale_cost, offer_cost)
+
+        # note moved from cp - what was it doing in there?
+        #  n fact why the extra def of name and img?
+        #warn "--- cp = " + @result_component.name
+        @target_name = @result_component.name
+        @target_img = @result_component.img
     end
 
     private
@@ -67,8 +72,6 @@ class MFRRecipe
             profit_per_skill_point = 0
         end
 
-        @target_name = @result_component.name
-        @target_img = @result_component.img
         @cost = {  "order" => GoldPrice.to_g(offer_cost),
                     "instant" => GoldPrice.to_g(sale_cost)
         }
@@ -94,7 +97,7 @@ class MFRRecipe
         # accepts a single parameter which is the name of the class for the tr/table row
         str = %{
             <tr class="#{cls}">
-            <td><img src='#{@target_img}'/></td>
+            <td><img style="width:32;height:32" src='#{@target_img}'/></td>
             <td>#{@target_name}</td><td><b>#{@profit['per_sp']}</b> <br/> (#{@profit['max']})</td>
             <td><b>#{@value['instant']}</b><br/> (#{@value['order']})</td><td><b>#{@cost['order']}</b>
             <br/> (#{@cost['instant']})</td>
@@ -121,8 +124,6 @@ class MFRRecipe
             </tr>
         }
     end
-
-
 end
 
 class CraftingMaterialRecipe < MFRRecipe
@@ -151,7 +152,7 @@ end
 class CommonRecipe < CraftingMaterialRecipe
         def initialize component_name, tier
 		super(component_name, tier, 250, tier == 6? 20 : 80 )
-		@sp_component = [Component.new("Philosopher's Stone", 0, 0.1), tier -1]
+		@sp_component = [Component.new("Philosopher's Stone", 0, 0.1), tier - 1]
 		forge
 	end
 
@@ -174,7 +175,7 @@ class LodestoneRecipe <  CraftingMaterialRecipe
     end
 
     def assemble
-            @comps << [@@mfrc.get(@component_name, :position => @target_tier -1), @base_quantity]
+            @comps << [@@mfrc.get(@component_name, :position => @target_tier - 1), @base_quantity]
             @comps << [@@mfrc.get("Bottle Of Elonian Wine"), 1]
             @comps << [@@mfrc.get("Dust", :position => @target_tier+1), 1]
     end
@@ -213,8 +214,6 @@ class MysticWeaponRecipe < MFRRecipe
     def assemble
         @sp_component = [Component.new("Eldritch Scroll",0, 50), 1]
         @comps << [@@mfrc.get("Mystic Coin"), 30]
-        #@comps << [@@mfrc.get("Mystic Weapon")[@component_name][1], 5]
-        #@comps << [@@mfrc.get("Mystic Weapon")[@component_name][2], 5]
         @comps << [@@mfrc.get("Mystic Weapon", :subsection =>@component_name, :position =>2), 5]
         @comps << [@@mfrc.get("Mystic Weapon", :subsection => @component_name, :position => 3), 5]
     end
@@ -234,26 +233,12 @@ class MysticForgeRecipe < MFRRecipe
 	    @type = type
 	    @sp_component = [Component.new("Eldritch Scroll",0, 50), 1]
             @result_component = @@mfrc.get(@type, :subsection => @component_name, :position => 1)
-            #@result_component = @@mfrc.get(@type)[@component_name][0]
 	    forge
 	end
 
         def assemble
 		(2..4).each do |i|
-			#@comps << @@mfrc.get(@type)[@component_name][i]
-			@comps << @@mfrc.get(@type, :subsection => @component_name, :position => i)
-
-                        # deal with the circumstance where we have a string rather than a component
-			#if @comps[-1][0].kind_of? String
-			#	begin
-                        #               # if its a string we should be able to look it up in the component table
-		#			@comps[-1][0] = @@mfrc.get(@comps[-1][0])
-		#		rescue
-                 #                       # however there is the occassional circumstance where it is a gift and needs 
-                  #                      # special treatment
-		#			@comps[-1][0] = GiftRecipe.new(@comps[-1][0])
-		##		end
-	#		end
+                    @comps << @@mfrc.get(@type, :subsection => @component_name, :position => i)
 		end
         end
 
@@ -276,8 +261,23 @@ class GiftRecipe < MysticForgeRecipe
             super
         end
 
+	def self.each &block
+	    @@mfrc.get("Gift").keys.each &block
+	end
+
 	def calc_profits sale_cost, offer_cost
+            warn " Gift Recipe" + sale_cost.to_s + offer_cost.to_s
+            #super sale_cost, offer_cost
 	    @price = GoldPrice.new(0, sale_cost, offer_cost)
+            @profit = { "max" => GoldPrice.to_g(0),
+                    "per_sp" => GoldPrice.to_g(0)
+            }
+            @value = { "order" => GoldPrice.to_g(offer_cost),
+                    "instant" => GoldPrice.to_g(sale_cost),
+            }
+        @cost = {  "order" => GoldPrice.to_g(offer_cost),
+                    "instant" => GoldPrice.to_g(sale_cost)
+        }
 	end
 end
 

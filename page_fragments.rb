@@ -83,6 +83,10 @@ def fine_crafting_materials
     ERB.new(template).result(binding)
 end
 
+def gifts
+    generic("Gifts", GiftRecipe)
+end
+
 def mystic_weapons
     generic("Mystic Weapons", MysticWeaponRecipe)
 end
