@@ -206,8 +206,8 @@ class MFRecipeComponents
         "Foefire's Power" => [ Component.new("Foefire's Power", 31078 ), ["Mystic Coin", 100], ["Gift Of Light", 1], ["Orichalcum Hammer Head", 250] ],
         "Gaze" => [ Component.new("Gaze", 31043 ), ["Mystic Coin", 40], ["SPCrystal", 1], ["Large Skull", 50] ],
         "Glint's Scale" => [ Component.new("Glint's Scale", 31047 ), ["Mystic Coin", 30], ["SPCrystal", 30], ["Bottle Of Elonian Wine", 10] ],
-        #"Goblet of Kings" => [ Component.new("Goblet of Kings", 31049), ["Mystic Coin", 30], ["Gold Ingot", 250], ["Bag of Jewels", 1] ],
-        #"Godswalk Enchiridion" => [ Component.new("Godswalk Enchiridion", 31041 ), ["Mystic Coin", 30], ["Pile of Chrystaline Dust", 250], ["Siege Masters Guide", 1] ],
+        "Goblet of Kings" => [ Component.new("Goblet of Kings", 31049), ["Mystic Coin", 30], ["Gold Ingot", 250], ["Bag Of Jewels", 1] ],
+        "Godswalk Enchiridion" => [ Component.new("Godswalk Enchiridion", 31041 ), ["Mystic Coin", 30], ["Pile Of Chrystaline Dust", 250], ["Siege Masters Guide", 1] ],
         "Heart of Mellaggan" => [ Component.new("Heart of Mellaggan", 31084 ), ["Mystic Coin", 30], ["Pearl", 250], ["Opal Orb", 20] ],
         "Illusion" => [ Component.new("Illusion", 31054 ), ["Mystic Coin", 50], ["Glob Of Ectoplasm", 250], ["Large Ancient Haft", 250] ],
         "Immobulus" => [ Component.new("Immobulus", 31057 ), ["Mystic Coin", 30], ["Giant Eye", 250], ["Pile Of Chrystaline Dust", 250]  ],
@@ -313,9 +313,11 @@ class MFRecipeComponents
     "Ancient Bone" => [ Component.new("Ancient Bone", 24358)],
     "Bottle Of Elonian Wine" => [ Component.new("Bottle of Elonian Wine", 19633, 2630)],
     "Stein of Highlander Beer" => [ Component.new("Stein of Highlander Beer", 0, 16)],
+    "Bag Of Jewels" => [ Component.new("Bag Of Jewels", 0, 1)],
 
 
     "SPCrystal"  => [ Component.new("Crystal", 0, 0.6)],
+    "Siege Masters Guide"  => [ Component.new("Siege Masters Guide", 0, 1)],
     "Bloodstone Shard"  => [ Component.new("Bloodstone Shard", 0, 200)]
 }
 
