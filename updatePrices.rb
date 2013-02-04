@@ -14,7 +14,7 @@ end
 #    end
 #end
 
-mfrc = MFRecipeComponents.new # static class which holds all the recipies and components.
+mfrc = MFRecipeComponents.new
 
 def checkCompArray x
     if x.kind_of? Array

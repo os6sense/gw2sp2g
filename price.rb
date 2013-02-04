@@ -40,6 +40,10 @@ class GoldPrice < Price
 		end
 	end
 
+        def inspect
+
+        end
+
 	def self.to_g val
 		r = ""
 		if val < 0

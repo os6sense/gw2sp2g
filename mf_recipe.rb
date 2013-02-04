@@ -40,8 +40,7 @@ class MFRRecipe
         @component_name = component_name
         @base_quantity = base_quantity
         @result_avg = result_avg
-
-        @@mfrc = MFRecipeComponents.instance
+        @@mfrc ||= MFRecipeComponents.new
         @comps = []
     end
 
