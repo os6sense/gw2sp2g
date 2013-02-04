@@ -3,9 +3,9 @@ require_relative 'price'
 # == Component
 # Components are the building blocks of recipes
 
-class Component 
-	# mix in the GW2Spidy module to allow us to look up a price by id
-	include GW2Spidy
+class Component
+        # mix in the GW2Spidy module to allow us to look up a price by id
+        include GW2Spidy
 
 	# name:: blah name
 	# img:: blah image
@@ -26,8 +26,9 @@ class Component
                 setImg
 	    else
 		@price = GoldPrice.new(id, price)
-		@img = self.getByID(id)['img']
+		@img = getByID(id)['img']
 	    end
+            puts "Init: " + name
 	end
 
         def setImg

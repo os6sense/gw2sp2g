@@ -7,6 +7,11 @@ require_relative 'price'
 require_relative 'mf_recipe'
 
 class MFRecipeComponents
+
+    def each &block
+        @cmp.values.each &block
+    end
+
     def initialize
         @cmp = {
 
@@ -30,9 +35,21 @@ class MFRecipeComponents
             ],
 
             "Leather" => [
+                Component.new("Rawhide Leather Section", 19719),
+                Component.new("Thin Leather Section", 19728),
+                Component.new("Course Leather Section", 19730),
+                Component.new("Rugged Leather Section", 19731),
+                Component.new("Thick Leather Section", 19729),
+                Component.new("Hardened Leather Section", 19732),
             ],
 
             "Wood" => [
+                Component.new("Green Wood Log", 19723),
+                Component.new("Soft Wood Log", 19726),
+                Component.new("Seasoned Wood Log", 19727),
+                Component.new("Hard Wood Log", 19724),
+                Component.new("Elder Wood Log", 19722),
+                Component.new("Ancient Wood Log", 19725),
             ],
 # Fine materials
 
@@ -174,7 +191,7 @@ class MFRecipeComponents
 
     # Gifts
     "Gift" => [{
-        "Gift Of Light" => [ [ Component.new("Gift Of Light", 19632)], [ Component.new("Orichalcum Ingot", 19685), 250], [ Component.new("Cured Hardened Leather Square",19737 ), 250], ["Charged Lodestone", 100] ],
+        "Gift Of Light" => [ [ Component.new("Gift Of Light", 19632)], ["Orichalcum Ingot", 250], [ Component.new("Cured Hardened Leather Square",19737 ), 250], ["Charged Lodestone", 100] ],
     #	"Gift Of Spiders" => [ ],
 	"Gift Of Lightning" => [Component.new("Gift Of Lightning", 19639), ["Orichalcum Ingot", 250], ["Charged Lodestone", 100 ], ["Bolt Of Gossamer", 250] ],
     #	"Gift Of Souls" => [ ],
@@ -186,7 +203,7 @@ class MFRecipeComponents
 
     # "Other" Mystic forge recipies
     "Mystic Forge" => [{
-	"Accursed Chains" => [ Component.new("Accursed Chains", 31046), ["Mystic Coin", 30], [ Component.new("Steel Ingot", 19688 ), 250], ["Orichalcum Ingot", 50] ],
+	"Accursed Chains" => [ Component.new("Accursed Chains", 31046), ["Mystic Coin", 30], [ "Steel Ingot", 250], ["Orichalcum Ingot", 50] ],
 	"Abyssal Scepter" => [ Component.new("Abyssal Scepted", 31058), ["Mystic Coin", 100], ["Glob Of Ectoplasm", 250], [ Component.new("Ancient Scepter Rod", 12976), 250] ],
 	"Aether" => [ Component.new("Aether", 31074), ["Mystic Coin", 100], ["Gift Of Light", 1], ["Ancient Shortbow Stave", 250] ],
 	"Azureflame" => [ Component.new("Azureflame", 31071), ["Mystic Coin", 100], ["Gift Of Light", 1], [ Component.new("Ancient Longbow Stave", 12941), 250] ],
@@ -305,7 +322,7 @@ class MFRecipeComponents
     "Powerful Venom Sac" => [ Component.new("Powerful Venom Sac", 24283) ],
 
     "Ghost Pepper" => [ Component.new("Ghost Pepper", 12544) ],
-
+    "Steel Ingot" => [ Component.new("Steel Ingot", 19688 ) ],
     "Bolt Of Gossamer" => [ Component.new("Bolt Of Gossamer", 19746) ],
     "Glob Of Ectoplasm" => [ Component.new("Glob Of Ectoplasm", 19721) ],
     "Mystic Coin" => [ Component.new("Mystic Coin", 19976) ],
