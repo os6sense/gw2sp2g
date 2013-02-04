@@ -54,6 +54,7 @@ def generate_page
 			</p>
 			<p>NB: Average common yield assumed to be 20 for T5->T6 and 80 for all lower tiers.</p>
 			<%= common_crafting_materials %>
+
 			<p>NB: Average Fine yield assumed to be 6 for T5->T6. Lower tier yield is set to 16 although the accuracy of this is unknown.<p>
 			<%= fine_crafting_materials %>
 			<%= dust %>

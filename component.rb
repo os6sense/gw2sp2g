@@ -28,7 +28,7 @@ class Component
 		@price = GoldPrice.new(id, price)
 		@img = getByID(id)['img']
 	    end
-            puts "Init: " + name
+            warn "Init: " + name
 	end
 
         def setImg
@@ -45,5 +45,3 @@ class Component
 
         end
 end
-
-

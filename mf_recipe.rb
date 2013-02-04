@@ -41,7 +41,7 @@ class MFRRecipe
         @base_quantity = base_quantity
         @result_avg = result_avg
 
-        @@mfrc = MFRecipeComponents.new # static class which holds all the recipies and components.
+        @@mfrc = MFRecipeComponents.instance
         @comps = []
     end
 
@@ -198,7 +198,7 @@ class DustRecipe <  CraftingMaterialRecipe
     def assemble
         super
         @comps.pop
-        @comps << [[Component.new("Philosopher's Stone", 0, 0.1), @target_tier -1], @target_tier -1]
+        @comps << [[Component.new("Philosopher's Stone", 0, 0.1), @target_tier - 1], @target_tier - 1]
     end
 end
 

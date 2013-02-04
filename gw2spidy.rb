@@ -3,7 +3,7 @@ require 'json'
 require 'net/http'
 require 'memcached'
 
-$memcached = Memcached.new("localhost:11211")
+$memcache = Memcached.new("localhost:11211")
 
 # GW2Spidy - a simple interface to GW2Spidy's json api
 # This is not particularly robust and if spidy is down it fails spectacularly
@@ -15,9 +15,9 @@ module GW2Spidy
     # return a valid value if successful
     def getByID(id)
         begin
-            $memcached.get("#{id}")
+            $memcache.get("#{id}")
         rescue Memcached::NotFound => e
-            warn "**Setting id #{id}" if $DEBUG
+            warn "** Setting id #{id}" if $DEBUG
             setByID(id)
         end
     end
@@ -28,7 +28,7 @@ module GW2Spidy
     def cached(cache_key)
         begin
             result = yield
-            $memcached.set(cache_key, result, 7200)
+            $memcache.set(cache_key, result, 7200)
             result
         rescue
             {}
@@ -49,10 +49,9 @@ module GW2Spidy
             rescue JSON::ParserError
                 # sometimes spidy returns results with "Warning" lines - find the first {
                 # and attempt to parse what remains after that
-                begin 
+                begin
                     warn "**** PARSING ERROR #{id}"
-                    c_resp = resp.body[resp.body.index("{"), resp.body.size ] 
-                    put c_resp
+                    c_resp = resp.body[resp.body.index("{"), resp.body.size ]
                     result = JSON.parse(c_resp)
                 rescue
                     warn " UNRECOVERABLE: (#{id})"

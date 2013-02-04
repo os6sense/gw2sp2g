@@ -5,8 +5,10 @@
 require_relative 'component'
 require_relative 'price'
 require_relative 'mf_recipe'
+require 'singleton'
 
 class MFRecipeComponents
+    include Singleton
 
     def each &block
         @cmp.values.each &block
@@ -241,8 +243,8 @@ class MFRecipeComponents
         "Naegling" => [ Component.new("Naegling", 31087 ), ["Mystic Coin", 20], ["Orichalcum Ingot", 100], ["Vial Of Powerful Blood", 50] ],
         "Phoenix Talon" => [ Component.new("Phoenix Talon", 31035 ), ["Mystic Coin", 50], ["Orichalcum Ingot", 100], ["Ruby Orb", 50] ],
         "Reaver of the Mists" => [ Component.new("Reaver of the Mists", 31034 ), ["Mystic Coin", 50], ["Crystal Lodestone", 20], ["Glob Of Ectoplasm", 250] ],
-        #"Rusttooth" => [ Component.new("Rusttooth", 31066 ), ["Mystic Coin", 10], ["Steel Ingot", 10], ["Seasoned Wood Plank", 10] ],
-        #"Song of the Numberless Pack" => [ Component.new("Song of the umberless Pack", 31050 ), "Mystic Coin", 20], ["Orichalcum Plated Dowel", 20], ["Orichalcum Warhorn Mouthpiece", 10] ],
+        "Rusttooth" => [ Component.new("Rusttooth", 31066 ), ["Mystic Coin", 10], ["Steel Ingot", 10], ["Seasoned Wood Plank", 10] ],
+        "Song of the Numberless Pack" => [ Component.new("Song of the umberless Pack", 31050 ), ["Mystic Coin", 20], ["Orichalcum Plated Dowel", 20], ["Orichalcum Warhorn Mouthpiece", 10] ],
         "Spirit Links" => [ Component.new("Spirit Links", 31051 ), ["Mystic Coin", 70], ["Glob Of Ectoplasm", 250], ["Orichalcum Ingot", 10] ],
         "Squeedily Spooch" => [ Component.new("Squeedily Spooch", 31048 ), ["Mystic Coin", 20], ["Amber Pebble", 250], ["Powerful Venom Sac", 100] ],
         "Stygian Blade" => [ Component.new("Stygian Blade", 31063 ), ["Mystic Coin", 50], ["Vial Of Powerful Blood", 250], ["Vicious Claw", 250] ],
@@ -253,7 +255,7 @@ class MFRecipeComponents
         "Titans' Vengance" => [ Component.new("Titans' Vengance", 31055 ), ["Mystic Coin", 50], ["Destroyer Lodestone", 50], ["Molten Lodestone", 50] ],
         "Unspoken Curse" => [ Component.new("Unspoken Curse", 31067 ), ["Mystic Coin", 50], ["Orichalcum Sword Blade", 100], ["Destroyer Lodestone", 50] ],
         "Vision of the Mists" => [ Component.new("Vision of the Mists", 31052 ), ["Mystic Coin", 100], ["Glob Of Ectoplasm", 250], ["Orichalcum Greatsword Blade", 250] ],
-        "Volcanus" => [ Component.new("Volcanus", 31052 ), ["Mystic Coin", 100], ["Vial Of Liquid Flame", 1], ["Molten Lodestone", 250] ],
+        "Volcanus" => [ Component.new("Volcanus", 31053 ), ["Mystic Coin", 100], ["Vial Of Liquid Flame", 1], ["Molten Lodestone", 250] ],
         "Wall of the Mists" => [ Component.new("Wall of the Mists", 31060 ), ["Mystic Coin", 50], ["Orichalcum Shield Boss", 250], ["Giant Eye", 30] ],
         "Wintersbark" => [ Component.new("Wintersbark", 31075 ), ["Mystic Coin", 100], ["Ancient Shortbow Stave", 250], ["Gift Of Ice", 1] ],
         "Wintersbite" => [ Component.new("Wintersbite", 31072 ), ["Mystic Coin", 100], ["Ancient Longbow Stave", 250], ["Gift Of Ice", 1] ],
@@ -277,6 +279,8 @@ class MFRecipeComponents
     "Orichalcum Sword Blade" => [ Component.new("Orichalcum Sword Blade", 12870 )],
     "Orichalcum Sword Hilt" => [ Component.new("Orichalcum Sword Hilt", 12846 ) ],
     "Orichalcum Spear Head" => [ Component.new("Orichalcum Spear Head", 12998 ) ],
+    "Orichalcum Plated Dowel" => [ Component.new("Orichalcum Plated Dowel", 12988) ],
+    "Orichalcum Warhorn Mouthpiece" => [ Component.new("Orichalcum Warhorn Mouthpiece", 12930) ],
 
     "Ancient Staff Head" => [ Component.new("Ancient Staff Head", 13261) ],
     "Ancient Staff Shaft" =>  [ Component.new("Ancient Staff Shaft", 12973) ],
@@ -306,6 +310,8 @@ class MFRecipeComponents
 
     "Lidless Eye" => [ Component.new("Lidless Eye", 31081) ],
 
+    "Seasoned Wood Plank" => [ Component.new("Seasoned Wood Plank", 19714) ],
+
     "Pearl" => [ Component.new("Pearl", 24500) ],
     "Ruby Orb" => [ Component.new("Emerald Orb", 24508) ],
     "Sapphire Orb" => [ Component.new("Sapphire Orb", 24516) ],
@@ -320,6 +326,7 @@ class MFRecipeComponents
 
     "Vial Of Powerful Blood" => [ Component.new("Vial Of Powerful Blood", 24295) ],
     "Powerful Venom Sac" => [ Component.new("Powerful Venom Sac", 24283) ],
+ 
 
     "Ghost Pepper" => [ Component.new("Ghost Pepper", 12544) ],
     "Steel Ingot" => [ Component.new("Steel Ingot", 19688 ) ],
