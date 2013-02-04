@@ -56,7 +56,7 @@ def common_crafting_materials
         <table id="common">
             <caption>Common Crafting Materials</caption>
             <%= CommonRecipe.table_header %>
-            <% ["Ore", "Cloth"].each do | mat |%>
+            <% ["Ore", "Cloth", "Wood", "Leather"].each do | mat |%>
                 <% 6.downto(2).each do | i | %>
                     <%= CommonRecipe.new(mat, i).as_tr %>
                 <% end %>

@@ -53,7 +53,6 @@ class MFRRecipe
 
         # note moved from cp - what was it doing in there?
         #  n fact why the extra def of name and img?
-        #warn "--- cp = " + @result_component.name
         @target_name = @result_component.name
         @target_img = @result_component.img
     end
@@ -161,7 +160,7 @@ end
 # == Fine Crafting Recipe
 class FineRecipe < CraftingMaterialRecipe
         def initialize component_name, tier
-		super(component_name, tier, 50, tier == 6? 6 : 6 )
+		super(component_name, tier, 50, tier == 6? 6 : 16 )
 		forge
 	end
 end
