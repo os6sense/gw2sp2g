@@ -5,12 +5,19 @@ require_relative 'page_fragments'
 
 def random_background
     urls = ["https://d3b4yo2b5lbfy.cloudfront.net/wp-content/uploads/wallpapers/GW2Warrior02-1280x960.jpg",
-        "https://d3b4yo2b5lbfy.cloudfront.net/wp-content/uploads/wallpapers/HumanBonusWP02-1280x960.jpg"
+        "https://d3b4yo2b5lbfy.cloudfront.net/wp-content/uploads/wallpapers/HumanBonusWP02-1280x960.jpg",
+        "https://d3b4yo2b5lbfy.cloudfront.net/wp-content/uploads/wallpapers/Sylvari-02-1280x960.jpg",
+        "https://d3b4yo2b5lbfy.cloudfront.net/wp-content/uploads/wallpapers/AsuraCharacter-1280x960.jpg",
+        "https://d3b4yo2b5lbfy.cloudfront.net/wp-content/uploads/wallpapers/GW2_ThiefWallpaper01-1280x960.jpg"
     ]
     "#{urls.sample}"
 end
 
 def generate_page
+
+        # Somewhat ugly however this is required to ensure we have the latest prices
+        MFRRecipe.reset_components
+
 	page_template = %{
 		<html>
 		<head>

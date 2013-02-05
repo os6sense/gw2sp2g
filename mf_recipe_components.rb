@@ -5,10 +5,8 @@
 require_relative 'component'
 require_relative 'price'
 require_relative 'mf_recipe'
-#require 'singleton'
 
 class MFRecipeComponents
-    #include Singleton
 
     def each &block
         @cmp.values.each &block

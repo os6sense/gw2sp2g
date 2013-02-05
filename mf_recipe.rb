@@ -40,7 +40,6 @@ class MFRRecipe
         @component_name = component_name
         @base_quantity = base_quantity
         @result_avg = result_avg
-        @@mfrc ||= MFRecipeComponents.new
         @comps = []
     end
 
@@ -82,6 +81,14 @@ class MFRRecipe
     end
 
     public
+
+    # In oreder to ensure that the latest prices are pulled from memcache it is neccessary to 
+    # get a new instance of the component "array" which creates a new instance of each component
+    # Note to self : Passenger and class level variables BAD!
+    def self.reset_components
+        @@mfrc = MFRecipeComponents.new
+    end
+
     def self.table_header
         # Generates a table header for HTML output
             %{
@@ -264,7 +271,6 @@ class GiftRecipe < MysticForgeRecipe
 	end
 
 	def calc_profits sale_cost, offer_cost
-            warn " Gift Recipe" + sale_cost.to_s + offer_cost.to_s
             #super sale_cost, offer_cost
 	    @price = GoldPrice.new(0, sale_cost, offer_cost)
             @profit = { "max" => GoldPrice.to_g(0),
@@ -273,9 +279,9 @@ class GiftRecipe < MysticForgeRecipe
             @value = { "order" => GoldPrice.to_g(offer_cost),
                     "instant" => GoldPrice.to_g(sale_cost),
             }
-        @cost = {  "order" => GoldPrice.to_g(offer_cost),
-                    "instant" => GoldPrice.to_g(sale_cost)
-        }
+            @cost = {  "order" => GoldPrice.to_g(offer_cost),
+                        "instant" => GoldPrice.to_g(sale_cost)
+            }
 	end
 end
 

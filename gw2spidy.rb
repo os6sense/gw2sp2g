@@ -29,7 +29,7 @@ module GW2Spidy
         begin
             result = yield
             $memcache.set(cache_key, result, 7200)
-            warn "Component #{cache_key} set successfully" 
+            warn "Component #{cache_key} Set Successfully" 
             result
         rescue
             {}
