@@ -18,6 +18,13 @@ def generate_page
         # Somewhat ugly however this is required to ensure we have the latest prices
         MFRRecipe.reset_components
 
+        # These recipes are generated before the template is created in order to allow
+        # for us to determine the highest returns from common crafting materials
+        #  and place this information at the head of the html
+        $top5 = HighestReturn.new
+        fine_frag = fine_crafting_materials
+        common_frag = common_crafting_materials
+
 	page_template = %{
 		<html>
 		<head>
@@ -59,11 +66,12 @@ def generate_page
 				Please also note that their are no definative figures for yields on the lower tier recipies and thus these all default to 6 hence some of the T2-T5 recipies may yield a greater profit than is illustrated.
 
 			</p>
+			<%= top5 %>
 			<p>NB: Average common yield assumed to be 20 for T5->T6 and 80 for all lower tiers.</p>
-			<%= common_crafting_materials %>
+			<%= common_frag%>
 
 			<p>NB: Average Fine yield assumed to be 6 for T5->T6. Lower tier yield is set to 16 although the accuracy of this is unknown.<p>
-			<%= fine_crafting_materials %>
+			<%= fine_frag %>
 			<%= dust %>
 			<%= lodestones %>
 			<%= mystic_weapons %>

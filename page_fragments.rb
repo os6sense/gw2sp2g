@@ -3,6 +3,26 @@
 require 'erb'
 require_relative 'mf_recipe'
 
+def output_tr recipe, mat, i
+    c = recipe.new(mat, i)
+    $top5.add(c)
+    c.as_tr
+end
+
+def top5
+    template = %{
+        <table>
+            <caption><a name="Top 5">Top 5 "Quick Sell" Recipes</caption>
+            <%= CommonRecipe.table_header %>
+            <% $top5.each do | item |%>
+                <%= item.as_tr "lvl0"%>
+            <% end %>
+        </table>
+    }
+
+    ERB.new(template).result(binding)
+end
+
 def generic caption, recipeType
     template = %{
         <table>
@@ -24,7 +44,7 @@ def lodestones
         <table id="lodestones">
             <caption>Lodestones</caption>
             <%= LodestoneRecipe.table_header %>
-            <% ["Charged", "Molten", "Crystal", "Destroyer", "Corrupted", "Onyx"].each do | lodestone |%>
+            <% LodestoneRecipe.each do | lodestone |%>
                 <% 5.downto(2).each do | i | %>
                     <%= LodestoneRecipe.new(lodestone, i).as_tr %>
                 <% end %>
@@ -56,9 +76,9 @@ def common_crafting_materials
         <table id="common">
             <caption>Common Crafting Materials</caption>
             <%= CommonRecipe.table_header %>
-            <% ["Ore", "Cloth", "Wood", "Leather"].each do | mat |%>
+            <% CommonRecipe.each do | mat |%>
                 <% 6.downto(2).each do | i | %>
-                    <%= CommonRecipe.new(mat, i).as_tr %>
+                    <%= output_tr(CommonRecipe, mat, i) %>
                 <% end %>
             <% end %>
         </table>
@@ -72,9 +92,9 @@ def fine_crafting_materials
         <table id="fine">
             <caption>Fine Crafting Materials</caption>
             <%= FineRecipe.table_header %>
-            <% ["Bone", "Fang", "Claw", "Blood", "Totem", "Scale", "Venom"].each do | mat |%>
+            <% FineRecipe.each do | mat |%>
                 <% 6.downto(2).each do | i | %>
-                    <%= FineRecipe.new(mat, i).as_tr %>
+                    <%= output_tr(FineRecipe, mat, i) %>
                 <% end %>
             <% end %>
         </table>

@@ -28,7 +28,7 @@ class Component
 		@price = GoldPrice.new(id, price)
 		@img = getByID(id)['img']
 	    end
-            
+
             warn "Init: " + name if $DEBUG
 
 	end

@@ -5,6 +5,8 @@ require_relative 'mf_recipe_components'
 # TODO: 
 #   add "each" method for all
 #   sort out the ugly TR method
+#   SP and Gold costs should be derived from the components themselves and be 
+#   cummulative
 
 # Reopen the array class to add accessors for  the circumstance where we have an
 # inner array (which is now true for all recipes) - this is primarily to avoid
@@ -31,40 +33,83 @@ class Array
     end
 end
 
+class HighestReturn
+    def initialize
+        @top5 = []
+    end
+
+    def add recipe
+        @top5 << recipe if @top5.size == 0
+
+        (0..(@top5.size >= 5?4:@top5.size - 1)).each do | i |
+            if recipe.profit["per_sp_value"] > (@top5[i]).profit["per_sp_value"]
+                @top5.sort! { |x, y| x.profit["per_sp_value"] <=> y.profit["per_sp_value"] }
+                @top5.delete_at(0) if @top5.size == 5
+                @top5 << recipe
+                break
+            end
+        end
+    end
+
+    def get i
+        @top5[i]
+    end
+
+    def each &block
+        #puts "***************** #{@top5.size}"
+        @top5.each &block
+    end
+end
 
 # == Base class
 class MFRRecipe
+    attr_accessor :profit, :name
     # component_name:: Required parameter which defines the name of the target combine
+    # base_quantity:: The amount needed in a single combine
+    # result_avg:: The average quanitity ptoduced by a combine
     protected
     def initialize component_name, base_quantity=0, result_avg=0
-        @component_name = component_name
+        @name = component_name
         @base_quantity = base_quantity
         @result_avg = result_avg
+
+        # comps is an array of all components used to assemble the recipe
         @comps = []
     end
 
+    # if a derived class uses the base classes forge recipe and assemble method
+    # is required.
     def forge
         assemble
-        sale_cost = @comps.inject(0.0) { | sum, el | sum + (el[0].price.sale * el[1]) }
-	offer_cost = @comps.inject(0.0) { | sum, el | sum + (el[0].price.offer * el[1]) }
-        calc_profits(sale_cost, offer_cost)
+        # work out the price if we were to sell at the current highest price
+        # note we also work out how many skill points the recipe costs
+        # since some have additional skill point based components
+        sale_cost = @comps.inject({:gold=>0.0 , :sp=>0}) do | sum, el | 
+            if el[0].price.kind_of? SkillPointPrice
+                sum[:sp] += (el[0].price.value); sum
+            else
+                sum[:gold] += (el[0].price.sale * el[1]);sum
+            end
+        end
 
-        # note moved from cp - what was it doing in there?
-        #  n fact why the extra def of name and img?
+	offer_cost = @comps.inject(0.0) { | sum, el | sum + (el[0].price.offer * el[1]) }
+        calc_profits(sale_cost[:gold], offer_cost, sale_cost[:sp])
+
         @target_name = @result_component.name
         @target_img = @result_component.img
     end
 
     private
-    def calc_profits sale_cost, offer_cost # :no_doc
+    def calc_profits sale_cost, offer_cost, sp_cost # :no_doc
         # Internal method, calculates profits and resale values and assigns them to instance level attibutes
 
         result_sale_value = @result_component.price.sale * @result_avg
         result_offer_value = @result_component.price.offer * @result_avg
 
         profit_max = ((result_sale_value * 0.85) - offer_cost).round()
+
         if @sp_component != nil
-            profit_per_skill_point = profit_max / ( @sp_component[0].price.value * @sp_component[1])
+            profit_per_skill_point = profit_max / (( @sp_component[0].price.value * @sp_component[1]) + sp_cost)
         else
             profit_per_skill_point = 0
         end
@@ -76,7 +121,8 @@ class MFRRecipe
                     "instant" => GoldPrice.to_g(result_sale_value),
         }
         @profit = { "max" => GoldPrice.to_g(profit_max),
-                    "per_sp" => GoldPrice.to_g(profit_per_skill_point)
+                    "per_sp" => GoldPrice.to_g(profit_per_skill_point),
+                    "per_sp_value" => profit_per_skill_point
         }
     end
 
@@ -87,6 +133,7 @@ class MFRRecipe
     # Note to self : Passenger and class level variables BAD!
     def self.reset_components
         @@mfrc = MFRecipeComponents.new
+
     end
 
     def self.table_header
@@ -137,12 +184,12 @@ class CraftingMaterialRecipe < MFRRecipe
 		super(component_name, base_quantity, result_avg)
 		@target_tier = tier
 		@sp_component = [Component.new("Philosopher's Stone", 0, 0.1), tier-1]
-		@result_component = @@mfrc.get(@component_name, :position => @target_tier)
+		@result_component = @@mfrc.get(@name, :position => @target_tier)
 	end
 
         def assemble()
-		@comps << [@@mfrc.get(@component_name, :position => @target_tier - 1), @base_quantity]
-                @comps << [@@mfrc.get(@component_name, :position => @target_tier), 1]
+		@comps << [@@mfrc.get(@name, :position => @target_tier - 1), @base_quantity]
+                @comps << [@@mfrc.get(@name, :position => @target_tier), 1]
 		@comps << [@@mfrc.get("Dust", :position => @target_tier), 5]
         end
 
@@ -161,6 +208,10 @@ class CommonRecipe < CraftingMaterialRecipe
 		forge
 	end
 
+        def self.each &block
+            ["Ore", "Cloth", "Wood", "Leather"].each &block
+        end
+
 end
 
 # == Fine Crafting Recipe
@@ -169,6 +220,10 @@ class FineRecipe < CraftingMaterialRecipe
 		super(component_name, tier, 50, tier == 6? 6 : 16 )
 		forge
 	end
+
+        def self.each &block
+            ["Bone", "Fang", "Claw", "Blood", "Totem", "Scale", "Venom"].each &block
+        end
 end
 
 # == Core/Lodestone
@@ -180,7 +235,7 @@ class LodestoneRecipe <  CraftingMaterialRecipe
     end
 
     def assemble
-            @comps << [@@mfrc.get(@component_name, :position => @target_tier - 1), @base_quantity]
+            @comps << [@@mfrc.get(@name, :position => @target_tier - 1), @base_quantity]
             @comps << [@@mfrc.get("Bottle Of Elonian Wine"), 1]
             @comps << [@@mfrc.get("Dust", :position => @target_tier+1), 1]
     end
@@ -189,8 +244,11 @@ class LodestoneRecipe <  CraftingMaterialRecipe
        ["Charged", "Molten", "Crystal", "Destroyer", "Corrupted", "Onyx"].each &block
     end
 
-    def as_tr
-            super (@target_tier==5?"lvl1":"lvl2")
+    #def as_tr
+    #    super (@target_tier==5?"lvl1":"lvl2")
+    #end
+    def as_tr cls=""
+            super(cls==""? (@target_tier==5?"lvl1":"lvl2"): cls)
     end
 end
 
@@ -212,15 +270,15 @@ end
 class MysticWeaponRecipe < MFRRecipe
     def initialize component_name
         super(component_name, 0, 1)
-        @result_component = @@mfrc.get("Mystic Weapon")[@component_name][0]
+        @result_component = @@mfrc.get("Mystic Weapon")[@name][0]
         forge
     end
 
     def assemble
         @sp_component = [Component.new("Eldritch Scroll",0, 50), 1]
         @comps << [@@mfrc.get("Mystic Coin"), 30]
-        @comps << [@@mfrc.get("Mystic Weapon", :subsection =>@component_name, :position =>2), 5]
-        @comps << [@@mfrc.get("Mystic Weapon", :subsection => @component_name, :position => 3), 5]
+        @comps << [@@mfrc.get("Mystic Weapon", :subsection =>@name, :position =>2), 5]
+        @comps << [@@mfrc.get("Mystic Weapon", :subsection => @name, :position => 3), 5]
     end
 
     def self.each &block
@@ -237,13 +295,13 @@ class MysticForgeRecipe < MFRRecipe
 	    super(component_name, 0, 1)
 	    @type = type
 	    @sp_component = [Component.new("Eldritch Scroll",0, 50), 1]
-            @result_component = @@mfrc.get(@type, :subsection => @component_name, :position => 1)
+            @result_component = @@mfrc.get(@type, :subsection => @name, :position => 1)
 	    forge
 	end
 
         def assemble
 		(2..4).each do |i|
-                    @comps << @@mfrc.get(@type, :subsection => @component_name, :position => i)
+                    @comps << @@mfrc.get(@type, :subsection => @name, :position => i)
 		end
         end
 
@@ -253,11 +311,11 @@ class MysticForgeRecipe < MFRRecipe
 end
 
 class GiftRecipe < MysticForgeRecipe
-	attr_accessor :name, :price, :img, :quantity
+	attr_accessor :price, :img, :quantity
         def initialize component_name
 	    super(component_name, "Gift")
 
-            @name = component_name
+            #@name = component_name
             @img = @result_component.img
             @quantity = 1
 	end
@@ -270,7 +328,7 @@ class GiftRecipe < MysticForgeRecipe
 	    @@mfrc.get("Gift").keys.each &block
 	end
 
-	def calc_profits sale_cost, offer_cost
+	def calc_profits sale_cost, offer_cost, sp_cost
             #super sale_cost, offer_cost
 	    @price = GoldPrice.new(0, sale_cost, offer_cost)
             @profit = { "max" => GoldPrice.to_g(0),
@@ -293,7 +351,7 @@ class PendantRecipe < MysticForgeRecipe
 
         def assemble
             super
-            if @component_name.include?("Triforge")
+            if @name.include?("Triforge")
 	        @sp_component = [Component.new("Crystals", 0, 0.6), 50]
             else
                 @sp_component = nil

@@ -17,7 +17,7 @@ module GW2Spidy
         begin
             $memcache.get("#{id}")
         rescue Memcached::NotFound => e
-            warn "** Setting id #{id}" if $DEBUG
+            warn "SETTING ID #{id}" if $DEBUG
             setByID(id)
         end
     end
@@ -51,11 +51,11 @@ module GW2Spidy
                 # sometimes spidy returns results with "Warning" lines - find the first {
                 # and attempt to parse what remains after that
                 begin
-                    warn "**** PARSING ERROR #{id}"
+                    warn "PARSING ERROR #{id}"
                     c_resp = resp.body[resp.body.index("{"), resp.body.size ]
                     result = JSON.parse(c_resp)
                 rescue
-                    warn " UNRECOVERABLE: (#{id})"
+                    warn "UNRECOVERABLE: (#{id})"
                 end
             end
 
