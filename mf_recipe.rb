@@ -1,12 +1,10 @@
 # == mf_recipe
-# Description: Provides a mechanism to calculate the return (in terms of gold made) via converting skill points into various items at the Mystic Toil^h^h^h^hForge.
+# Description: Provides a mechanism to calculate the return (in terms of gold made)
+# via converting skill points into various items at the Mystic Toil^h^h^h^hForge.
 require_relative 'mf_recipe_components'
 
-# TODO: 
-#   add "each" method for all
+# TODO:
 #   sort out the ugly TR method
-#   SP and Gold costs should be derived from the components themselves and be 
-#   cummulative
 
 # Reopen the array class to add accessors for  the circumstance where we have an
 # inner array (which is now true for all recipes) - this is primarily to avoid
@@ -33,33 +31,6 @@ class Array
     end
 end
 
-class HighestReturn
-    def initialize
-        @top5 = []
-    end
-
-    def add recipe
-        @top5 << recipe if @top5.size == 0
-
-        (0..(@top5.size >= 5?4:@top5.size - 1)).each do | i |
-            if recipe.profit["per_sp_value"] > (@top5[i]).profit["per_sp_value"]
-                @top5.sort! { |x, y| x.profit["per_sp_value"] <=> y.profit["per_sp_value"] }
-                @top5.delete_at(0) if @top5.size == 5
-                @top5 << recipe
-                break
-            end
-        end
-    end
-
-    def get i
-        @top5[i]
-    end
-
-    def each &block
-        #puts "***************** #{@top5.size}"
-        @top5.each &block
-    end
-end
 
 # == Base class
 class MFRRecipe
@@ -94,9 +65,6 @@ class MFRRecipe
 
 	offer_cost = @comps.inject(0.0) { | sum, el | sum + (el[0].price.offer * el[1]) }
         calc_profits(sale_cost[:gold], offer_cost, sale_cost[:sp])
-
-        @target_name = @result_component.name
-        @target_img = @result_component.img
     end
 
     private
@@ -149,8 +117,8 @@ class MFRRecipe
         # accepts a single parameter which is the name of the class for the tr/table row
         str = %{
             <tr class="#{cls}">
-            <td><img style="width:32;height:32" src='#{@target_img}'/></td>
-            <td>#{@target_name}</td><td><b>#{@profit['per_sp']}</b> <br/> (#{@profit['max']})</td>
+            <td><img style="width:32;height:32" src='#{@result_component.img}'/></td>
+            <td>#{@result_component.name}</td><td><b>#{@profit['per_sp']}</b> <br/> (#{@profit['max']})</td>
             <td><b>#{@value['instant']}</b><br/> (#{@value['order']})</td><td><b>#{@cost['order']}</b>
             <br/> (#{@cost['instant']})</td>
             <td style="vertical-align:middle;">
@@ -168,7 +136,8 @@ class MFRRecipe
         end
 
         if @sp_component != nil
-            str += %{<span class="rc"><img style="width:25;height:25px" title="#{@sp_component[0].name}" src="#{@sp_component[0].img}"/>&nbsp;x #{@sp_component[1]}&nbsp;</span>
+            str += %{<span class="rc"><img style="width:25;height:25px" title="#{@sp_component[0].name}"
+                    src="#{@sp_component[0].img}"/>&nbsp;x #{@sp_component[1]}&nbsp;</span>
                 }
         end
         str += %{
@@ -229,24 +198,21 @@ end
 # == Core/Lodestone
 class LodestoneRecipe <  CraftingMaterialRecipe
     def initialize component_name, tier
-            super(component_name, tier, 2, 1)
-            @sp_component = [Component.new("Crystals", 0, 0.6), 1]
-            forge
+        super(component_name, tier, 2, 1)
+        @sp_component = [Component.new("Crystals", 0, 0.6), 1]
+        forge
     end
 
     def assemble
-            @comps << [@@mfrc.get(@name, :position => @target_tier - 1), @base_quantity]
-            @comps << [@@mfrc.get("Bottle Of Elonian Wine"), 1]
-            @comps << [@@mfrc.get("Dust", :position => @target_tier+1), 1]
+        @comps << [@@mfrc.get(@name, :position => @target_tier - 1), @base_quantity]
+        @comps << [@@mfrc.get("Bottle Of Elonian Wine"), 1]
+        @comps << [@@mfrc.get("Dust", :position => @target_tier+1), 1]
     end
 
     def self.each &block
        ["Charged", "Molten", "Crystal", "Destroyer", "Corrupted", "Onyx"].each &block
     end
 
-    #def as_tr
-    #    super (@target_tier==5?"lvl1":"lvl2")
-    #end
     def as_tr cls=""
             super(cls==""? (@target_tier==5?"lvl1":"lvl2"): cls)
     end
@@ -263,6 +229,10 @@ class DustRecipe <  CraftingMaterialRecipe
         super
         @comps.pop
         @comps << [[Component.new("Philosopher's Stone", 0, 0.1), @target_tier - 1], @target_tier - 1]
+    end
+
+    def self.each &block
+       ["Dust"].each &block
     end
 end
 

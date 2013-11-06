@@ -1,0 +1,55 @@
+LoadModule passenger_module /var/lib/gems/1.9.1/gems/passenger-3.0.18/ext/apache2/mod_passenger.so
+PassengerRoot /var/lib/gems/1.9.1/gems/passenger-3.0.18
+PassengerRuby /usr/bin/ruby1.9.1
+
+<VirtualHost *:8000>
+	ServerAdmin webmaster@localhost
+
+
+	DocumentRoot /var/www
+	<Directory />
+		Options FollowSymLinks
+		AllowOverride None
+	</Directory>
+	<Directory /var/www/>
+		Options Indexes FollowSymLinks MultiViews
+		AllowOverride None
+		Order allow,deny
+		allow from all
+	</Directory>
+
+	RackBaseURI /test
+	<Directory /var/www/test>
+                Allow from all
+                Options -MultiViews
+        </Directory>
+	RackBaseURI /gw2sp2g
+	<Directory /var/www/gw2sp2g>
+                Allow from all
+                Options -MultiViews
+        </Directory>
+
+#	ScriptAlias /cgi-bin/ /usr/lib/cgi-bin/
+#	<Directory "/usr/lib/cgi-bin">
+#		AllowOverride None
+#		Options +ExecCGI -MultiViews +SymLinksIfOwnerMatch
+#		Order allow,deny
+#		Allow from all
+#	</Directory>
+
+	#DocumentRoot /var/www/gw2sp2g
+	#<Directory /var/www/gw2sp2g/>
+	#    Options +ExecCGI
+	#    AddHandler cgi-script .rb
+	#</Directory>
+
+	ErrorLog ${APACHE_LOG_DIR}/error.log
+
+	# Possible values include: debug, info, notice, warn, error, crit,
+	# alert, emerg.
+	LogLevel warn
+
+	CustomLog ${APACHE_LOG_DIR}/access.log combined
+
+
+</VirtualHost>

@@ -2,6 +2,7 @@
 # The "main" of the application
 require 'erb'
 require_relative 'page_fragments'
+require_relative 'highest_return'
 
 def random_background
     urls = ["https://d3b4yo2b5lbfy.cloudfront.net/wp-content/uploads/wallpapers/GW2Warrior02-1280x960.jpg",
@@ -57,13 +58,28 @@ def generate_page
 		<div id="wrapper">
 			<h1>Skill Point To Gold Values - ALPHA VERSION</h1>
 			<p id="intro">
-                                ** Please note that this is a work in progress and no guarantees are made as to the accuracy of these figures. <br/><br/>
-				This page attempts to show the current values of conversions that you can make using skill points at the Mystic Forge. It uses prices from gw2spidy which are refreshed every 15 minutes, hence there my be some difference between current trading post values/costs and those displayed. <br/><br/>
-				Costs are provided illustrating the price based on both buying via a buy order or buying instantly. Value is displayed showing the current trading post sale price before taxes.
-				Profit per SP is calculated after all taxes and fees have been deducted and is based on selling at the current \"Buy it instantly\" price on the trading post. 
+                                ** Please note that this is a work in progress and no guarantees are made as to the accuracy of these figures.
+                                <br/><br/>
+                                UPDATE: 06/11/13
+                                I'm about to tear down the AWS instance that has been serving this app BUT I hope to move it across to
+                                a new box as part of a rubberized setup.<br/><br/>
+                                <b>If this server vanishes check my github account for the new URL <a href="https://github.com/os6sense/gw2sp2g">https://github.com/os6sense/gw2sp2g</a><br/><br/></b>
+                                I've 95.1% finished with a first pass of the backend - I'm using this project as a way to learn ruby 
+                                (<a href="https://github.com/os6sense/gw2sp2g">souce code available on github</a> - critical comments appreciated)
+                                and the next step there will be to create a rails version. I'm very unhappy with the presentation of the tables 
+                                hence I want to try and better convey the information the pages contain. Expect the site to be all over the place 
+                                the next few days while I play with css and various js frameworks.
+                                <br/>
+                                <br/>
+				This page shows the current values of conversions that you can make using skill points at the Mystic Forge.
+                                It uses prices from gw2spidy which are refreshed every 15 minutes, hence there my be some difference between
+                                current trading post values/costs and those displayed. <br/><br/>
+				Costs are provided illustrating the price based on both buying via a buy order or buying instantly.
+                                Value is displayed showing the current trading post sale price before taxes.
+				Profit per SP is calculated after all taxes and fees have been deducted and is based on selling at the current
+                                \"Buy it instantly\" price on the trading post.
 				<br/>
 				<br/>
-				Please also note that their are no definative figures for yields on the lower tier recipies and thus these all default to 6 hence some of the T2-T5 recipies may yield a greater profit than is illustrated.
 
 			</p>
 			<%= top5 %>

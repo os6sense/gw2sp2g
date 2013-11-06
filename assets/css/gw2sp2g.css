@@ -1,0 +1,98 @@
+html {
+}
+body {
+	margin:50px 0px; padding:0px;
+	text-align:center;
+	font-family: arial;
+}
+ul{list-style:none;}
+
+a { text-decoration: none }
+#intro {
+	background-color: #EEEEEE;
+	border-radius: 5px;
+	padding: 10px;
+}
+
+#nav {
+        float: left;
+        position:fixed;
+        top: 10px;
+        left: 50px;
+        width: 250px;
+        height: 200px;
+
+	border:2px solid gray;
+        margin: 0 auto;
+	padding: 2px;
+        text-align:left;
+	border-radius: 5px;
+        background: #ffffff;
+        opacity:0.9;
+        filter:alpha(opacity=90); /* For IE8 and earlier */
+}
+
+#wrapper {
+	border:2px solid gray;
+        margin: 0 auto;
+	padding: 10px;
+	width:1000px;
+        text-align:left;
+	border-radius: 5px;
+        background: #ffffff;
+        opacity:0.9;
+        filter:alpha(opacity=90); /* For IE8 and earlier */
+}
+
+.rc {
+    float: left;
+    width: 65px;
+    display:table-cell;
+    vertical-align:text-bottom;
+    height:32px;
+}
+
+table {
+    border: 1px solid black;
+    border-radius: 15px;
+    margin-bottom: 20px;
+}
+
+th {
+    text-align:left;
+    font-size: 12px;
+}
+
+td:first-child {
+    width: 20px;
+}
+
+td {
+    width: 140px;
+    text-align:left;
+    font-size: 12px;
+}
+
+td:last-child {
+	width: 260px;
+}
+
+.lvl1 td {
+	font-style: bold;
+}
+
+.lvl2 td {
+	padding-left: 10px;
+	font-style: normal;
+}
+caption, th, td {
+  padding: .2em .8em;
+  border: 1px solid #fff;
+}
+
+caption {
+  background: #dbb768;
+  font-weight: bold;
+  font-size: 1.1em;
+  border-radius: 15px;
+}
